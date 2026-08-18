@@ -6,6 +6,10 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me-please-32-cha
 const COOKIE_NAME = "ecv_admin_token";
 const COOKIE_MAX_AGE = 60 * 60 * 8; // 8h
 
+// ============================================
+// TOKEN FUNCTIONS
+// ============================================
+
 export function signToken(payload: object): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "8h" });
 }
@@ -13,6 +17,9 @@ export function signToken(payload: object): string {
 export function verifyToken(token: string): any {
   try { return jwt.verify(token, JWT_SECRET); } catch { return null; }
 }
+
+// generateToken = signToken (alias for compatibility)
+export const generateToken = signToken;
 
 export function getTokenFromReq(req: any): string | null {
   // HttpOnly cookie first, then Authorization header fallback
@@ -59,6 +66,7 @@ export async function hashPassword(pw: string): Promise<string> {
   const salt = await bcrypt.genSalt(12);
   return bcrypt.hash(pw, salt);
 }
+
 export async function comparePassword(pw: string, hash: string): Promise<boolean> {
   return bcrypt.compare(pw, hash);
 }
@@ -70,4 +78,43 @@ export function requireAdmin(req: any, res: any): { email: string } | null {
     return null;
   }
   return user;
+}
+
+// ============================================
+// AUTHENTICATE ADMIN (Middleware)
+// ============================================
+
+export async function authenticateAdmin(req: any, res: any, next: any) {
+  try {
+    const token = getTokenFromReq(req);
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        error: { code: "UNAUTHORIZED", message: "No token provided. Please sign in." }
+      });
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return res.status(401).json({
+        success: false,
+        error: { code: "UNAUTHORIZED", message: "Invalid or expired token. Please sign in again." }
+      });
+    }
+
+    // Attach admin user to request object
+    req.admin = {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role || 'admin'
+    };
+    
+    next();
+  } catch (error) {
+    console.error("[auth] authenticateAdmin error:", error);
+    return res.status(401).json({
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Authentication failed. Please try again." }
+    });
+  }
 }
