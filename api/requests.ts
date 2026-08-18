@@ -1,8 +1,8 @@
-import { connectDB, isDBConfigured } from "./lib/db";
-import { validatePublicInput } from "./lib/validation";
-import { rateLimit, getClientIp } from "./lib/rateLimit";
-import VerificationRequest from "./models/VerificationRequest";
-import { nextRequestId } from "./lib/counter";
+import { connectDB, isDBConfigured } from "./lib/db.js";  // ← .js add kiya
+import { validatePublicInput } from "./lib/validation.js";  // ← .js add kiya
+import { rateLimit, getClientIp } from "./lib/rateLimit.js";  // ← .js add kiya
+import VerificationRequest from "./models/VerificationRequest.js";  // ← .js add kiya
+import { nextRequestId } from "./lib/counter.js";  // ← .js add kiya
 
 // In-memory fallback when MONGO not configured (preview)
 const memStore: any[] = [];
