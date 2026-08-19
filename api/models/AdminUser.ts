@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, CallbackWithoutResultAndOptionalError } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IAdminUser extends Document {
@@ -16,16 +16,13 @@ const AdminUserSchema = new Schema<IAdminUser>({
   role: { type: String, default: 'admin' }
 }, { timestamps: true, collection: "admin_users" });
 
-// ✅ Hash password before saving
-AdminUserSchema.pre('save', async function(next) {
+// ✅ FIX: pre('save') with explicit this type
+AdminUserSchema.pre<IAdminUser>('save', function(next: CallbackWithoutResultAndOptionalError) {
   if (!this.isModified('passwordHash')) return next();
-  try {
-    const salt = await bcrypt.genSalt(12);
-    this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
-    next();
-  } catch (error) {
-    next(error as any);  // ← TypeScript error fixed
-  }
+  
+  const salt = bcrypt.genSaltSync(12);
+  this.passwordHash = bcrypt.hashSync(this.passwordHash, salt);
+  next();
 });
 
 // ✅ Compare password method
