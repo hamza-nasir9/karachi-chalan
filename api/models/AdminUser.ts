@@ -1,18 +1,38 @@
 import mongoose, { Schema, Document } from "mongoose";
+import bcrypt from "bcryptjs";
 
 export interface IAdminUser extends Document {
   email: string;
   passwordHash: string;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  role: string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const AdminUserSchema = new Schema<IAdminUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
   name: { type: String, required: true },
+  role: { type: String, default: 'admin' }
 }, { timestamps: true, collection: "admin_users" });
+
+// ✅ Hash password before saving
+AdminUserSchema.pre('save', async function(next) {
+  if (!this.isModified('passwordHash')) return next();
+  try {
+    const salt = await bcrypt.genSalt(12);
+    this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+    next();
+  } catch (error) {
+    next(error as any);  // ← TypeScript error fixed
+  }
+});
+
+// ✅ Compare password method
+AdminUserSchema.methods.comparePassword = async function(password: string): Promise<boolean> {
+  if (!this.passwordHash) return false;
+  return bcrypt.compare(password, this.passwordHash);
+};
 
 export default (mongoose.models.AdminUser as mongoose.Model<IAdminUser>) ||
   mongoose.model<IAdminUser>("AdminUser", AdminUserSchema);

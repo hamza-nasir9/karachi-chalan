@@ -38,6 +38,7 @@ export interface IStatusChange {
   to: string;
   changedAt: Date;
   changedBy: string;
+  note?: string;
 }
 
 export interface IVerificationRequest extends Document {
@@ -93,6 +94,7 @@ const StatusChangeSchema = new Schema<IStatusChange>({
   to: { type: String, required: true },
   changedAt: { type: Date, required: true },
   changedBy: { type: String, required: true },
+  note: { type: String }
 }, { _id: false });
 
 const VerificationRequestSchema = new Schema<IVerificationRequest>({
@@ -120,7 +122,6 @@ const VerificationRequestSchema = new Schema<IVerificationRequest>({
   collection: "verification_requests",
 });
 
-// Ensure indexes for duplicate detection and admin search
 VerificationRequestSchema.index({ vehicleRegistrationNumber: 1, email: 1, cnic: 1, createdAt: 1 });
 VerificationRequestSchema.index({ createdAt: -1 });
 

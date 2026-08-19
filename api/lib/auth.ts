@@ -18,16 +18,14 @@ export function verifyToken(token: string): any {
   try { return jwt.verify(token, JWT_SECRET); } catch { return null; }
 }
 
-// generateToken = signToken (alias for compatibility)
+// ✅ generateToken = signToken (alias for compatibility)
 export const generateToken = signToken;
 
 export function getTokenFromReq(req: any): string | null {
-  // HttpOnly cookie first, then Authorization header fallback
   const cookies = parse(req.headers.cookie || "");
   if (cookies[COOKIE_NAME]) return cookies[COOKIE_NAME];
   const auth = req.headers.authorization || "";
   if (auth.startsWith("Bearer ")) return auth.slice(7);
-  // also support x-admin-token for dev
   if (req.headers["x-admin-token"]) return req.headers["x-admin-token"];
   return null;
 }
@@ -81,7 +79,7 @@ export function requireAdmin(req: any, res: any): { email: string } | null {
 }
 
 // ============================================
-// AUTHENTICATE ADMIN (Middleware)
+// ✅ AUTHENTICATE ADMIN (Middleware)
 // ============================================
 
 export async function authenticateAdmin(req: any, res: any, next: any) {
@@ -102,7 +100,6 @@ export async function authenticateAdmin(req: any, res: any, next: any) {
       });
     }
 
-    // Attach admin user to request object
     req.admin = {
       id: decoded.id,
       email: decoded.email,
