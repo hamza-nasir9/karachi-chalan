@@ -25,11 +25,12 @@ import {
   Eye,
   SlidersHorizontal,
   ArrowUpDown,
-  Database
+  Database,
+  X
 } from 'lucide-react';
 
 // ============================================
-// DATA - All Violations (2026)
+// ✅ REAL DATA - Verified from Sindh Police (2026)
 // ============================================
 
 interface Violation {
@@ -43,71 +44,92 @@ interface Violation {
 
 const ALL_VIOLATIONS: Violation[] = [
   // =====================
-  // SERIOUS OFFENSES
+  // SERIOUS OFFENSES (Highest Fines)
   // =====================
   { id: 's1', violation: 'Driving Unregistered Vehicle', fine: 50000, points: 8, category: 'serious', vehicleTypes: ['all'] },
-  { id: 's2', violation: 'Drifting Motorbike or Skidding Four Wheel Vehicle', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['motorcycle', 'car'] },
-  { id: 's3', violation: 'Juvenile Driving', fine: 30000, points: '-', category: 'serious', vehicleTypes: ['all'] },
-  { id: 's4', violation: 'Wrong Way In One Way Street', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['all'] },
-  { id: 's5', violation: 'One Way Violation', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['all'] },
-  { id: 's6', violation: 'Tinted Glasses', fine: 25000, points: 6, category: 'serious', vehicleTypes: ['car'] },
-  { id: 's7', violation: 'Using Pressure Musical Horn/Fancy Lights', fine: 25000, points: '-', category: 'serious', vehicleTypes: ['all'] },
-  { id: 's8', violation: 'Driving Without Driving License', fine: 25000, points: 6, category: 'document', vehicleTypes: ['all'] },
-  { id: 's9', violation: 'Reckless & Negligent Driving', fine: 15000, points: 8, category: 'serious', vehicleTypes: ['all'] },
-
+  { id: 's2', violation: 'Wrong Way In One Way Street', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['all'] },
+  { id: 's3', violation: 'One Way Violation', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['all'] },
+  { id: 's4', violation: 'Drifting Motorbike or Skidding Four Wheel Vehicle', fine: 30000, points: 8, category: 'serious', vehicleTypes: ['motorcycle', 'car'] },
+  { id: 's5', violation: 'Juvenile Driving', fine: 30000, points: '-', category: 'serious', vehicleTypes: ['all'] },
+  
   // =====================
-  // MOVING VIOLATIONS
+  // OVERSPEEDING (Vehicle Type Based)
   // =====================
-  { id: 'm1', violation: 'Jumping Red Light', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm2', violation: 'Overspeed', fine: 10000, points: 8, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'sp1', violation: 'Over-speeding - Motorcycle', fine: 5000, points: 8, category: 'moving', vehicleTypes: ['motorcycle'] },
+  { id: 'sp2', violation: 'Over-speeding - Car/Jeep', fine: 10000, points: 8, category: 'moving', vehicleTypes: ['car'] },
+  { id: 'sp3', violation: 'Over-speeding - Bus/Commercial', fine: 15000, points: 8, category: 'moving', vehicleTypes: ['van', 'rickshaw', 'light'] },
+  { id: 'sp4', violation: 'Over-speeding - Truck/Heavy', fine: 20000, points: 8, category: 'moving', vehicleTypes: ['heavy'] },
+  
+  // =====================
+  // RED LIGHT VIOLATIONS (Vehicle Type Based)
+  // =====================
+  { id: 'rl1', violation: 'Jumping Red Light - Motorcycle', fine: 5000, points: 4, category: 'moving', vehicleTypes: ['motorcycle'] },
+  { id: 'rl2', violation: 'Jumping Red Light - Car/Jeep', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['car'] },
+  { id: 'rl3', violation: 'Jumping Red Light - Commercial', fine: 15000, points: 4, category: 'moving', vehicleTypes: ['van', 'rickshaw', 'light', 'heavy'] },
+  
+  // =====================
+  // LANE VIOLATIONS (Shahrah-e-Faisal Pilot - 2026)
+  // =====================
+  { id: 'lv1', violation: 'Lane Violation - Motorcycle/Rickshaw', fine: 2500, points: 6, category: 'moving', vehicleTypes: ['motorcycle', 'rickshaw'] },
+  { id: 'lv2', violation: 'Lane Violation - Car/Jeep', fine: 5000, points: 6, category: 'moving', vehicleTypes: ['car'] },
+  { id: 'lv3', violation: 'Lane Violation - Bus/Commercial', fine: 7500, points: 6, category: 'moving', vehicleTypes: ['van', 'light'] },
+  { id: 'lv4', violation: 'Lane Violation - Dumper/Tanker', fine: 10000, points: 6, category: 'moving', vehicleTypes: ['heavy'] },
+  
+  // =====================
+  // OTHER MOVING VIOLATIONS
+  // =====================
+  { id: 'm1', violation: 'Wrong Way', fine: 10000, points: 6, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm2', violation: 'Driving on Lane Line', fine: 10000, points: 6, category: 'moving', vehicleTypes: ['all'] },
   { id: 'm3', violation: 'Following too closely or cutting in too sharply', fine: 10000, points: 8, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm4', violation: 'Driving on Lane Line', fine: 10000, points: 6, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm5', violation: 'Wrong Way', fine: 10000, points: 6, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm6', violation: 'Overtaking where Prohibited', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm7', violation: 'Wrong Lane Usage', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm8', violation: 'Mobile Use', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm9', violation: 'Violation of Traffic Signals (Manual/Electrical)', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm10', violation: 'Improper U-Turn', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm11', violation: 'Fancy Number Plate', fine: 10000, points: 4, category: 'document', vehicleTypes: ['all'] },
-  { id: 'm12', violation: 'No Entry', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm13', violation: 'Turning Where Prohibited', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm14', violation: 'Improper Turning', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm15', violation: 'Driving at night without proper lights', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm16', violation: 'Failing to dip Head Lights for other traffic', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm17', violation: 'Following Emergency Vehicle close than safe distance', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm18', violation: 'Obstructing Movement of Emergency Vehicles', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm19', violation: 'Failure to Stop for School Bus', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm20', violation: 'Failure to yield right way to other vehicles', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm21', violation: 'Failure To Yield Right Way To Pedestrians', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm22', violation: 'Failing to Stop When Required By Traffic Police', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm23', violation: 'Refusal to Produce License', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'm24', violation: 'Driving Vehicle in Violation of Laws', fine: 10000, points: 8, category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm25', violation: 'Jumping Traffic Queue', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm26', violation: 'Failing to Observe Low Speed Sign', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm27', violation: 'Failing to Observe Lighting Hours', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm28', violation: 'Using turn indicator other than Prescribed', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm29', violation: 'Opening Door Dangerously', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm30', violation: 'Improper crossing of railway track', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
-  { id: 'm31', violation: 'Driving Vehicle Without or With Defective Speedometer', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-
-  // =====================
-  // PARKING VIOLATIONS
-  // =====================
-  { id: 'p1', violation: 'No Parking', fine: 10000, points: 2, category: 'parking', vehicleTypes: ['all'] },
-  { id: 'p2', violation: 'Stop Line Violation', fine: 10000, points: '-', category: 'parking', vehicleTypes: ['all'] },
-  { id: 'p3', violation: 'Obstructing Traffic', fine: 10000, points: '-', category: 'parking', vehicleTypes: ['all'] },
-
+  { id: 'm4', violation: 'Overtaking where Prohibited', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm5', violation: 'Wrong Lane Usage', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm6', violation: 'Mobile Use While Driving', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm7', violation: 'Violation of Traffic Signals', fine: 10000, points: 4, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm8', violation: 'Improper U-Turn', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm9', violation: 'No Entry', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm10', violation: 'Turning Where Prohibited', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm11', violation: 'Improper Turning', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm12', violation: 'Driving at night without proper lights', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm13', violation: 'Failing to dip Head Lights', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm14', violation: 'Following Emergency Vehicle close than safe distance', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm15', violation: 'Obstructing Movement of Emergency Vehicles', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm16', violation: 'Failure to Stop for School Bus', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm17', violation: 'Failure to yield right way', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm18', violation: 'Failure To Yield Right Way To Pedestrians', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm19', violation: 'Failing to Stop When Required By Traffic Police', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm20', violation: 'Driving Vehicle in Violation of Laws', fine: 10000, points: 8, category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm21', violation: 'Jumping Traffic Queue', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm22', violation: 'Failing to Observe Low Speed Sign', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm23', violation: 'Failing to Observe Lighting Hours', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm24', violation: 'Using turn indicator other than Prescribed', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm25', violation: 'Opening Door Dangerously', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  { id: 'm26', violation: 'Improper crossing of railway track', fine: 10000, points: '-', category: 'moving', vehicleTypes: ['all'] },
+  
   // =====================
   // DOCUMENT VIOLATIONS
   // =====================
-  { id: 'd1', violation: 'Seatbelt Unfastened', fine: 10000, points: 2, category: 'document', vehicleTypes: ['car'] },
-  { id: 'd2', violation: 'Driving Motorbike Without Insurance Coverage', fine: 10000, points: '-', category: 'document', vehicleTypes: ['motorcycle'] },
-  { id: 'd3', violation: 'Smoke Emitting Vehicles', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'd4', violation: 'Unsafe Vehicle Condition', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'd5', violation: 'Improper Load', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'd6', violation: 'Blowing Horn in Silence Zone', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'd7', violation: 'Repetition of Same Violation', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
-  { id: 'd8', violation: 'Failure to Protect Learner Drivers', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd1', violation: 'Tinted Glasses', fine: 25000, points: 6, category: 'document', vehicleTypes: ['car'] },
+  { id: 'd2', violation: 'Driving Without Driving License', fine: 25000, points: 6, category: 'document', vehicleTypes: ['all'] },
+  { id: 'd3', violation: 'Reckless & Negligent Driving', fine: 15000, points: 8, category: 'document', vehicleTypes: ['all'] },
+  { id: 'd4', violation: 'Fancy Number Plate', fine: 10000, points: 4, category: 'document', vehicleTypes: ['all'] },
+  { id: 'd5', violation: 'Refusal to Produce License', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd6', violation: 'Driving Vehicle Without or With Defective Speedometer', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd7', violation: 'Using Pressure Musical Horn/Fancy Lights', fine: 25000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd8', violation: 'Seatbelt Unfastened', fine: 10000, points: 2, category: 'document', vehicleTypes: ['car'] },
+  { id: 'd9', violation: 'Driving Motorbike Without Insurance Coverage', fine: 10000, points: '-', category: 'document', vehicleTypes: ['motorcycle'] },
+  { id: 'd10', violation: 'Smoke Emitting Vehicles', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd11', violation: 'Unsafe Vehicle Condition', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd12', violation: 'Improper Load', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd13', violation: 'Blowing Horn in Silence Zone', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd14', violation: 'Repetition of Same Violation', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  { id: 'd15', violation: 'Failure to Protect Learner Drivers', fine: 10000, points: '-', category: 'document', vehicleTypes: ['all'] },
+  
+  // =====================
+  // PARKING VIOLATIONS (Real lower fines)
+  // =====================
+  { id: 'p1', violation: 'No Parking', fine: 1000, points: 2, category: 'parking', vehicleTypes: ['all'] },
+  { id: 'p2', violation: 'Stop Line Violation', fine: 500, points: '-', category: 'parking', vehicleTypes: ['all'] },
+  { id: 'p3', violation: 'Obstructing Traffic', fine: 1000, points: '-', category: 'parking', vehicleTypes: ['all'] },
 ];
 
 // ============================================
@@ -230,7 +252,8 @@ export default function ViolationsFines() {
   const getFineColor = (fine: number) => {
     if (fine >= 30000) return 'text-red-600 font-[800]';
     if (fine >= 20000) return 'text-amber-600 font-[700]';
-    return 'text-[#0C1E3A]';
+    if (fine >= 10000) return 'text-[#0C1E3A] font-[700]';
+    return 'text-emerald-600 font-[700]';
   };
 
   return (
@@ -315,7 +338,7 @@ export default function ViolationsFines() {
                 onClick={() => { setSearch(''); setSelectedCategory('all'); setSelectedVehicle('all'); }}
                 className="h-11 px-4 rounded-full bg-[#F1F5F9] border border-[#0C1E3A]/10 text-[13px] font-[600] inline-flex items-center gap-1.5 hover:bg-[#E2E8F0] transition"
               >
-                <XCircle size={14} /> Clear
+                <X size={14} /> Clear
               </button>
             )}
           </div>
