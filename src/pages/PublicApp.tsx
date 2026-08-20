@@ -8,6 +8,7 @@ import {
   Shield, Clock, ClipboardCheck, Award, EyeOff, Copy, Check, AlertTriangle,
   Info, ChevronLeft, Loader2, RefreshCw, CalendarDays
 } from 'lucide-react'
+import { Link } from 'react-router-dom';
 import { submitVerificationRequest } from '../lib/apiClient'
 
 // ─────────── FAQ ───────────
@@ -101,12 +102,12 @@ export default function PublicApp() {
           setForm(f => ({ ...f, ...parsed }))
         }
       }
-    } catch {}
+    } catch { }
   }, [])
   useEffect(() => {
     if (view !== 'form') return
     const id = setTimeout(() => {
-      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(form)) } catch {}
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(form)) } catch { }
     }, 500)
     return () => clearTimeout(id)
   }, [form, view])
@@ -235,7 +236,7 @@ export default function PublicApp() {
       setSubmittedAt(new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))
     }
     setSubmitting(false)
-    try { localStorage.removeItem(DRAFT_KEY) } catch {}
+    try { localStorage.removeItem(DRAFT_KEY) } catch { }
     setView('success')
   }
   const copyId = async () => {
@@ -300,6 +301,12 @@ export default function PublicApp() {
               <button onClick={() => scrollTo('home')} className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition focus-visible:bg-[#0C1E3A]/[0.06]">Home</button>
               <button onClick={() => scrollTo('how')} className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition">How It Works</button>
               <button onClick={() => scrollTo('info')} className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition">E-Challan Information</button>
+              <Link
+                to="/guides"
+                className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition text-[#24344F] font-[550]"
+              >
+                Guides
+              </Link>
               <button onClick={() => scrollTo('faq')} className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition">FAQs</button>
               <button onClick={() => scrollTo('contact')} className="px-3.5 py-2 rounded-full hover:bg-[#0C1E3A]/[0.06] hover:text-[#0C1E3A] transition">Contact</button>
             </nav>
@@ -339,12 +346,31 @@ export default function PublicApp() {
                 {view === 'home' ? (
                   <>
                     {[
-                      { label: 'Home', id: 'home' }, { label: 'How It Works', id: 'how' },
-                      { label: 'E-Challan Information', id: 'info' }, { label: 'FAQs', id: 'faq' }, { label: 'Contact', id: 'contact' },
+                      { label: 'Home', id: 'home' },
+                      { label: 'How It Works', id: 'how' },
+                      { label: 'E-Challan Information', id: 'info' },
+                      { label: 'Guides', id: 'guides', link: '/guides' },
+                      { label: 'FAQs', id: 'faq' },
+                      { label: 'Contact', id: 'contact' },
                     ].map(item => (
-                      <button key={item.id} onClick={() => scrollTo(item.id)} className="text-left px-4 py-3.5 rounded-2xl hover:bg-[#F8FAFC] text-[15px] font-[600] text-[#0C1E3A] flex items-center justify-between active:bg-[#F1F5F9]">
-                        {item.label} <ArrowRight size={16} className="opacity-40" />
-                      </button>
+                      item.link ? (
+                        <Link
+                          key={item.id}
+                          to={item.link}
+                          onClick={() => setMobileOpen(false)}
+                          className="text-left px-4 py-3.5 rounded-2xl hover:bg-[#F8FAFC] text-[15px] font-[600] text-[#0C1E3A] flex items-center justify-between active:bg-[#F1F5F9]"
+                        >
+                          {item.label} <ArrowRight size={16} className="opacity-40" />
+                        </Link>
+                      ) : (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollTo(item.id)}
+                          className="text-left px-4 py-3.5 rounded-2xl hover:bg-[#F8FAFC] text-[15px] font-[600] text-[#0C1E3A] flex items-center justify-between active:bg-[#F1F5F9]"
+                        >
+                          {item.label} <ArrowRight size={16} className="opacity-40" />
+                        </button>
+                      )
                     ))}
                     <button onClick={openForm} className="mt-3 w-full h-[48px] rounded-full bg-[#0C1E3A] text-white font-[700] flex items-center justify-center gap-2 shadow active:scale-[0.98]">Request Verification <ArrowUpRight size={16} /></button>
                   </>

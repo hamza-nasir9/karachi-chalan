@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'rea
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { Loader2, ShieldCheck } from 'lucide-react'
 import { checkAuth } from './lib/adminAuth'
+import Guides from './pages/Guides';
+import LocateCameras from './pages/LocateCameras';
+import ViolationsFines from './pages/ViolationsFines';
+import PayChallanOnline from './pages/PayChallanOnline';
 
 const PublicApp = lazy(() => import('./pages/PublicApp'))
 const AdminLogin = lazy(() => import('./pages/AdminLogin'))
@@ -65,7 +69,14 @@ export default function App() {
     <BrowserRouter>
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
+          {/* ✅ PUBLIC ROUTES */}
           <Route path="/" element={<PublicApp />} />
+          <Route path="/guides" element={<Guides />} />
+          <Route path="/locate-cameras" element={<LocateCameras />} />
+          <Route path="/fines" element={<ViolationsFines />} />
+          <Route path="/guides/pay-challan-online" element={<PayChallanOnline />} />
+          
+          {/* ✅ ADMIN ROUTES */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<RequireAdmin />}>
             <Route path="/admin" element={<AdminDashboard />} />
@@ -73,6 +84,8 @@ export default function App() {
             <Route path="/admin/requests" element={<AdminRequests />} />
             <Route path="/admin/requests/:id" element={<AdminRequestDetail />} />
           </Route>
+          
+          {/* ✅ 404 */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
