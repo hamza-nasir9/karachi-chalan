@@ -490,7 +490,7 @@ export default function ViolationsFines() {
 
         {/* 📝 Footer Note */}
         <div className="mt-6 text-center text-[12px] leading-5 text-[#5B6B85]">
-          <p>⚠️ <strong>Disclaimer:</strong> Fines are indicative and subject to change. Always verify with official sources.</p>
+          <p> <strong>Disclaimer:</strong> Fines are indicative and subject to change. Always verify with official sources.</p>
           <p className="mt-1">Verified facts & sources (2026) — Official Sindh Police website • Traffic Violations & Fines Table</p>
         </div>
       </div>
