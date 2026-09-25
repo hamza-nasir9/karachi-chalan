@@ -212,7 +212,7 @@ export function prepareHoldingDraft(request: VerificationRequest): { subject: st
   const firstName = request.fullName.split(" ")[0] || request.fullName;
   return {
     subject: `Update on your ${service.title} request — ${request.requestId}`,
-    text: `Dear ${firstName},\n\nWe are reviewing your ${service.emailSubject} ${request.requestId}.\nOur team is checking the relevant records and will email the result within 24–48 working hours.\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+    text: `Dear ${firstName},\n\nWe are reviewing your ${service.emailSubject} ${request.requestId}.\nOur team is checking the relevant records and will email the result within 24 hours.\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
   };
 }
 

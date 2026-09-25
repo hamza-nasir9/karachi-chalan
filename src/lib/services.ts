@@ -15,7 +15,10 @@ export type RequestType = 'CHECK_CHALLAN' | 'CHALLAN_STATUS' | 'COMPLAINT_STATUS
 
 export const REQUEST_TYPES: RequestType[] = ['CHECK_CHALLAN', 'CHALLAN_STATUS', 'COMPLAINT_STATUS', 'BLACKLIST_BLOCK']
 
-export type FieldKey = 'fullName' | 'cnic' | 'phone' | 'email' | 'challanNumber' | 'complaintNumber' | 'vehicleNumber'
+export type FieldKey = 'fullName' | 'cnic' | 'phone' | 'email' | 'challanNumber' | 'complaintNumber' | 'vehicleNumber' | 'vehicleRegistration' | 'vehicleType'
+
+/** Kept in sync with api/lib/validation.ts VEHICLE_TYPES. */
+export const VEHICLE_TYPES = ['Car', 'Motorcycle', 'Rickshaw', 'Van / Pickup', 'Bus / Truck', 'Other']
 
 export interface ServiceField {
   key: FieldKey
@@ -25,6 +28,9 @@ export interface ServiceField {
   inputMode?: 'text' | 'numeric' | 'email' | 'tel'
   mono?: boolean
   hint?: string
+  /** 'select' renders a dropdown using `options`; omitted/'text' renders a plain input. */
+  type?: 'text' | 'select'
+  options?: string[]
 }
 
 export interface ResultOption {
@@ -71,6 +77,8 @@ const F: Record<FieldKey, ServiceField> = {
   challanNumber: { key: 'challanNumber', label: 'Challan Number', placeholder: 'e.g., KHI-E-123456', autoComplete: 'off', mono: true },
   complaintNumber: { key: 'complaintNumber', label: 'Complaint Number', placeholder: 'e.g., CMP-2026-0001', autoComplete: 'off', mono: true },
   vehicleNumber: { key: 'vehicleNumber', label: 'Vehicle Number', placeholder: 'e.g., KHI-3921', autoComplete: 'off', mono: true, hint: 'As shown on the number plate.' },
+  vehicleRegistration: { key: 'vehicleRegistration', label: 'Vehicle Registration / Number Plate', placeholder: 'e.g., KHI-3921', autoComplete: 'off', mono: true, hint: 'As shown on the number plate.' },
+  vehicleType: { key: 'vehicleType', label: 'Vehicle Type', placeholder: 'Select vehicle type', type: 'select', options: VEHICLE_TYPES },
 }
 
 const pick = (...keys: FieldKey[]) => keys.map(k => F[k])
@@ -85,8 +93,8 @@ export const SERVICES: Record<RequestType, ServiceDef> = {
     intro: 'Share your CNIC and challan number. Our team verifies the records and emails you the outcome.',
     heading: ['Check', 'Challan'],
     icon: FileSearch,
-    fields: pick('fullName', 'cnic', 'challanNumber', 'phone', 'email'),
-    detail: ['fullName', 'email', 'cnic', 'phone', 'challanNumber'],
+    fields: pick('fullName', 'cnic', 'vehicleRegistration', 'vehicleType', 'challanNumber', 'phone', 'email'),
+    detail: ['fullName', 'email', 'cnic', 'phone', 'vehicleRegistration', 'vehicleType', 'challanNumber'],
     results: [
       { value: 'CHALLAN_FOUND', label: 'Challan Found', short: 'Challan Found' },
       { value: 'NO_CHALLAN_FOUND', label: 'No Challan Found', short: 'No Challan Found', requiresNotes: true },
@@ -250,6 +258,15 @@ export function validateServiceForm(service: ServiceDef, values: Record<string, 
         else if (v.length < 3 || v.length > 16) errors.vehicleNumber = 'Enter the registration number as shown on the number plate.'
         break
       }
+      case 'vehicleRegistration': {
+        const v = raw.toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9-]/g, '')
+        if (!v) errors.vehicleRegistration = 'Vehicle registration / number plate is required (e.g., KHI-3921).'
+        else if (v.length < 3 || v.length > 16) errors.vehicleRegistration = 'Enter the registration number as shown on the number plate.'
+        break
+      }
+      case 'vehicleType':
+        if (!VEHICLE_TYPES.includes(raw)) errors.vehicleType = 'Select a vehicle type.'
+        break
     }
   }
   return errors
@@ -262,6 +279,7 @@ interface RequestLike {
   mobile?: string
   challanRef?: string | null
   vehicleRegistrationNumber?: string
+  vehicleType?: string
   formData?: Record<string, string>
 }
 
@@ -276,5 +294,7 @@ export function getRequestField(request: RequestLike | null | undefined, key: Fi
     case 'challanNumber': return fd.challanNumber || request?.challanRef || ''
     case 'complaintNumber': return fd.complaintNumber || ''
     case 'vehicleNumber': return fd.vehicleNumber || request?.vehicleRegistrationNumber || ''
+    case 'vehicleRegistration': return fd.vehicleRegistration || request?.vehicleRegistrationNumber || ''
+    case 'vehicleType': return fd.vehicleType || request?.vehicleType || ''
   }
 }

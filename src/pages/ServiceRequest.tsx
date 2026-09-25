@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ShieldCheck, Lock, Mail, ChevronLeft, ArrowUpRight, Send, Loader2, AlertCircle, AlertTriangle,
-  CheckCircle2, Copy, Check, Shield, UserCheck, Phone, Fingerprint, FileText, Car, ClipboardCheck, Clock3, X, RefreshCw,
+  CheckCircle2, Copy, Check, Shield, UserCheck, Phone, Fingerprint, FileText, Car, ClipboardCheck, Clock3, X, RefreshCw, ChevronDown,
   type LucideIcon,
 } from 'lucide-react'
 import { submitServiceRequest } from '../lib/apiClient'
@@ -16,6 +16,7 @@ const FIELD_ICON: Partial<Record<FieldKey, { icon: LucideIcon; size: number }>> 
   challanNumber: { icon: FileText, size: 15 },
   complaintNumber: { icon: ClipboardCheck, size: 15 },
   vehicleNumber: { icon: Car, size: 15 },
+  vehicleRegistration: { icon: Car, size: 15 },
 }
 
 const emptyValues = (s: ServiceDef): Record<string, string> => Object.fromEntries(s.fields.map(f => [f.key, '']))
@@ -227,22 +228,44 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
                       <div key={f.key} className={fullWidth ? 'sm:col-span-2' : ''}>
                         <label htmlFor={`svc-${f.key}`} className="flex items-center gap-2 text-[13px] font-[700]">{f.label} <span className="text-red-600" aria-hidden="true">*</span></label>
                         <div className="relative mt-2">
-                          <input
-                            id={`svc-${f.key}`}
-                            name={f.key}
-                            value={values[f.key]}
-                            onChange={e => setField(f.key, e.target.value)}
-                            placeholder={f.placeholder}
-                            type={f.key === 'email' ? 'email' : 'text'}
-                            inputMode={f.inputMode}
-                            autoComplete={f.autoComplete}
-                            required
-                            aria-required="true"
-                            aria-invalid={!!err}
-                            aria-describedby={err ? `svc-${f.key}-err` : undefined}
-                            className={`w-full h-[48px] rounded-xl border bg-white px-4 ${deco ? 'pr-10' : ''} text-[14px] outline-none placeholder:text-[#94A3B8] disabled:opacity-60 ${f.mono ? 'mono font-[600] tracking-wide placeholder:font-sans placeholder:font-[500] placeholder:tracking-normal' : 'font-[500]'} ${err ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-50' : 'border-[#0C1E3A]/15 focus:border-[#0C1E3A] focus:ring-4 focus:ring-[#0C1E3A]/10'}`}
-                          />
-                          {deco && <deco.icon size={deco.size} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] pointer-events-none" />}
+                          {f.type === 'select' ? (
+                            <>
+                              <select
+                                id={`svc-${f.key}`}
+                                name={f.key}
+                                value={values[f.key]}
+                                onChange={e => setField(f.key, e.target.value)}
+                                required
+                                aria-required="true"
+                                aria-invalid={!!err}
+                                aria-describedby={err ? `svc-${f.key}-err` : undefined}
+                                className={`w-full h-[48px] rounded-xl border bg-white px-4 pr-10 text-[14px] font-[500] outline-none appearance-none disabled:opacity-60 ${err ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-50' : 'border-[#0C1E3A]/15 focus:border-[#0C1E3A] focus:ring-4 focus:ring-[#0C1E3A]/10'} ${values[f.key] ? '' : 'text-[#94A3B8]'}`}
+                              >
+                                <option value="">{f.placeholder}</option>
+                                {f.options?.map(o => <option key={o} value={o} className="text-[#0C1E3A]">{o}</option>)}
+                              </select>
+                              <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] pointer-events-none" />
+                            </>
+                          ) : (
+                            <>
+                              <input
+                                id={`svc-${f.key}`}
+                                name={f.key}
+                                value={values[f.key]}
+                                onChange={e => setField(f.key, e.target.value)}
+                                placeholder={f.placeholder}
+                                type={f.key === 'email' ? 'email' : 'text'}
+                                inputMode={f.inputMode}
+                                autoComplete={f.autoComplete}
+                                required
+                                aria-required="true"
+                                aria-invalid={!!err}
+                                aria-describedby={err ? `svc-${f.key}-err` : undefined}
+                                className={`w-full h-[48px] rounded-xl border bg-white px-4 ${deco ? 'pr-10' : ''} text-[14px] outline-none placeholder:text-[#94A3B8] disabled:opacity-60 ${f.mono ? 'mono font-[600] tracking-wide placeholder:font-sans placeholder:font-[500] placeholder:tracking-normal' : 'font-[500]'} ${err ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-50' : 'border-[#0C1E3A]/15 focus:border-[#0C1E3A] focus:ring-4 focus:ring-[#0C1E3A]/10'}`}
+                              />
+                              {deco && <deco.icon size={deco.size} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] pointer-events-none" />}
+                            </>
+                          )}
                         </div>
                         {f.hint && !err && <p className="mt-1.5 text-[11.5px] text-[#64748B]">{f.hint}</p>}
                         {err && <p id={`svc-${f.key}-err`} className="mt-1.5 text-[12.5px] font-medium text-red-600 flex items-center gap-1"><AlertCircle size={13} /> {err}</p>}
@@ -319,7 +342,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
 
                 <div className="mt-6 rounded-2xl bg-[#EFF6FF] border border-blue-100 p-4 text-left flex gap-3 text-[13px] leading-6 text-[#1E3A5F]">
                   <Clock3 size={18} className="shrink-0 mt-0.5 text-[#0C1E3A]" />
-                  <div><span className="font-[700]">What’s next?</span> A team member reviews your request and emails the result to the address above. If you don’t see it, check your spam folder.</div>
+                  <div><span className="font-[700]">What’s next?</span> A team member reviews your request and emails the result within 24 hours. If you don’t see it, check your spam folder.</div>
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">

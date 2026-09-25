@@ -317,10 +317,13 @@ export default function AdminRequestDetail() {
   const inSync = !!verification && verification.outcome === outcome
     && (verification.notes || '').trim() === (outcome === 'CHALLAN_FOUND' ? f.notes : otherNotes).trim()
     && (outcome !== 'CHALLAN_FOUND' || CHALLAN_DETAIL_KEYS.every(k => ((verification[k] as string | undefined) || '') === (f[k] || '').trim()))
-  const isLegacyVehicleRequest = service.type === 'CHECK_CHALLAN' && !!request.vehicleType
+  // True legacy requests (pre-4-service) have a top-level vehicleType but no formData.vehicleType —
+  // new Check Challan submissions mirror vehicleType into formData too, so they're excluded here.
+  const isLegacyVehicleRequest = service.type === 'CHECK_CHALLAN' && !!request.vehicleType && !request.formData?.vehicleType
   const TILE_LABEL: Record<FieldKey, string> = {
     fullName: 'FULL NAME', email: 'EMAIL', cnic: 'CNIC', phone: service.type === 'CHECK_CHALLAN' ? 'MOBILE' : 'PHONE',
     challanNumber: 'CHALLAN NUMBER', complaintNumber: 'COMPLAINT NUMBER', vehicleNumber: 'VEHICLE NUMBER',
+    vehicleRegistration: 'VEHICLE REGISTRATION / NUMBER PLATE', vehicleType: 'VEHICLE TYPE',
   }
 
   return (
@@ -394,7 +397,7 @@ export default function AdminRequestDetail() {
                     <div key={key} className="rounded-xl bg-[#F8FAFC] border border-[#0C1E3A]/5 p-4"><div className="text-[11px] font-[800] tracking-[0.08em] text-[#5B6B85]">{label}</div><div className="font-[600] break-all mt-1 inline-flex items-center gap-1"><Mail size={12} className="text-[#0F766E] shrink-0" /> {raw || '—'}</div></div>
                   )
                 }
-                if (key === 'vehicleNumber') {
+                if (key === 'vehicleNumber' || key === 'vehicleRegistration') {
                   return (
                     <div key={key} className="rounded-xl border border-[#0C1E3A]/10 bg-[#FEFCE8] p-4"><div className="text-[11px] font-[800] tracking-[0.08em] text-[#5B6B85]">{label}</div><div className="mono font-[800] text-[15px] mt-1 break-all">{raw || '—'}</div></div>
                   )

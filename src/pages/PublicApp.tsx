@@ -16,7 +16,7 @@ import { SERVICE_LIST } from '../lib/services'
 const FAQS = [
   { q: "Is this an instant challan search?", a: "No. This is a verification request platform. You submit your vehicle and contact details, our team verifies the relevant records, and we send your challan status to your email. We do not provide instant automated results." },
   { q: "What information do I need to submit?", a: "Vehicle registration number (as on number plate), your full name, mobile number, and email where you want the result. The verification form guides you step-by-step — no login is required." },
-  { q: "How long does verification take?", a: "Most requests are reviewed within 24–48 working hours after submission. You receive a confirmation email with your Request ID immediately, and the final result on the same email once verified." },
+  { q: "How long does verification take?", a: "Most requests are reviewed within 24 hours of submission. You receive a confirmation email with your Request ID immediately, and the final result on the same email once verified." },
   { q: "Is my data secure?", a: "Yes. Your information is transmitted over 256-bit SSL, stored securely and used only to process your verification request. We never share it with third parties and never ask for card OTPs or passwords." },
   { q: "Do you have direct government database access?", a: "We do not claim direct government database access or official affiliation. Our team checks relevant public and records-based sources and compiles a clear, human-verified response. For disputes you are guided to the official Traffic Police channel." },
   { q: "What will I receive in the email?", a: "If a challan exists: challan number, violation type, date & time, location, fine amount, due date and payment status. If no record is found you receive a clear 'No record found' confirmation for your reference." },
@@ -123,15 +123,9 @@ export default function PublicApp() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     setMobileOpen(false)
   }
-  const openForm = () => {
-    setView('form')
-    setStep(1)
-    setSubmitError(null)
-    setErrors({})
-    setIsDuplicate(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    setMobileOpen(false)
-  }
+  // NOTE: the legacy single-form flow (view === 'form') below is intentionally no longer
+  // reachable from the UI — every CTA now scrolls to the 4-service section instead (see scrollTo('how')
+  // above). Left in place, unused, so nothing about the request/admin flow is disturbed.
   const goHome = () => {
     setView('home')
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -268,7 +262,7 @@ export default function PublicApp() {
       `}</style>
 
       {/* Top micro bar */}
-      {/* <div className="w-full bg-[#0C1E3A] text-white">
+      <div className="w-full bg-[#0C1E3A] text-white">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-[36px] flex items-center justify-between text-[12px] leading-none">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide">
@@ -282,7 +276,7 @@ export default function PublicApp() {
             <a href="mailto:support@karachiechallan.pk" className="hover:text-white inline-flex items-center gap-1.5 focus-visible:rounded-lg"><MailIcon size={12} /> support@karachiechallan.pk</a>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#FDFDFB]/85 backdrop-blur-xl border-b border-[#0C1E3A]/[0.06]">
@@ -322,7 +316,7 @@ export default function PublicApp() {
 
           <div className="flex items-center gap-2.5">
             {view === 'home' ? (
-              <button onClick={openForm} className="hidden sm:inline-flex items-center gap-2 bg-[#0C1E3A] hover:bg-[#0A1933] active:scale-[0.98] text-white rounded-full px-6 h-[42px] text-[14px] font-[700] tracking-[-0.01em] shadow-[0_10px_24px_rgba(12,30,58,0.18)] transition">
+              <button onClick={() => scrollTo('how')} className="hidden sm:inline-flex items-center gap-2 bg-[#0C1E3A] hover:bg-[#0A1933] active:scale-[0.98] text-white rounded-full px-6 h-[42px] text-[14px] font-[700] tracking-[-0.01em] shadow-[0_10px_24px_rgba(12,30,58,0.18)] transition">
                 Request Verification <ArrowUpRight size={16} className="opacity-90" />
               </button>
             ) : view === 'form' ? (
@@ -373,7 +367,7 @@ export default function PublicApp() {
                         </button>
                       )
                     ))}
-                    <button onClick={openForm} className="mt-3 w-full h-[48px] rounded-full bg-[#0C1E3A] text-white font-[700] flex items-center justify-center gap-2 shadow active:scale-[0.98]">Request Verification <ArrowUpRight size={16} /></button>
+                    <button onClick={() => scrollTo('how')} className="mt-3 w-full h-[48px] rounded-full bg-[#0C1E3A] text-white font-[700] flex items-center justify-center gap-2 shadow active:scale-[0.98]">Request Verification <ArrowUpRight size={16} /></button>
                   </>
                 ) : (
                   <>
@@ -419,7 +413,7 @@ export default function PublicApp() {
                   </p>
 
                   <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
-                    <button onClick={openForm} className="inline-flex items-center justify-center gap-2 bg-[#0C1E3A] hover:bg-[#09162E] active:scale-[0.98] text-white rounded-full px-7 h-[52px] text-[15px] font-[700] shadow-[0_12px_28px_rgba(12,30,58,0.20)] transition">
+                    <button onClick={() => scrollTo('how')} className="inline-flex items-center justify-center gap-2 bg-[#0C1E3A] hover:bg-[#09162E] active:scale-[0.98] text-white rounded-full px-7 h-[52px] text-[15px] font-[700] shadow-[0_12px_28px_rgba(12,30,58,0.20)] transition">
                       Request Challan Verification <ArrowUpRight size={18} className="opacity-90" />
                     </button>
                     <button onClick={() => scrollTo('how')} className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F8FAFC] border border-[#0C1E3A]/10 rounded-full px-7 h-[52px] text-[15px] font-[700] text-[#0C1E3A] shadow-sm transition active:scale-[0.98]">
@@ -440,7 +434,7 @@ export default function PublicApp() {
                   </div>
 
                   <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-3 text-[12.5px] font-medium text-[#64748B]">
-                    <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> 24–48h processing</span>
+                    <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Answers within 24 hours</span>
                     <span className="hidden sm:inline w-px h-3 bg-[#0C1E3A]/10" />
                     <span className="hidden sm:inline">No instant search • No gov affiliation implied</span>
                   </div>
@@ -548,7 +542,7 @@ export default function PublicApp() {
 
               <div className="mt-8 sm:mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { k: "24–48h", v: "Avg. verification time" }, { k: "100%", v: "Human-reviewed" },
+                  { k: "24h", v: "Avg. verification time" }, { k: "100%", v: "Human-reviewed" },
                   { k: "SSL", v: "256-bit encrypted" }, { k: "Email", v: "Result delivery" },
                 ].map(s => (
                   <div key={s.k} className="rounded-2xl bg-white border border-[#0C1E3A]/5 px-4 py-4 flex items-center gap-3 shadow-sm hover:shadow-[0_8px_20px_rgba(12,30,58,0.06)] transition-shadow">
@@ -589,12 +583,35 @@ export default function PublicApp() {
                   <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" /> HOW IT WORKS
                 </div>
                 <h2 className="mt-4 text-[30px] sm:text-[44px] font-[900] tracking-[-0.04em] leading-[0.92] text-balance">
-                  A simple, <span className="serif italic font-normal text-[#0F766E]">transparent</span> process
+                  Request a <span className="serif italic font-normal text-[#0F766E]">Verification</span>
                 </h2>
-                <p className="mt-3 text-[15px] sm:text-[16px] leading-6 text-[#4A5A78] text-pretty">You request — we verify — you get the answer by email. No instant-search promises.</p>
+                <p className="mt-3 text-[15px] sm:text-[16px] leading-6 text-[#4A5A78] text-pretty">Choose a service below — you request, we verify, you get the answer by email. No instant-search promises.</p>
               </div>
 
-              <div className="mt-10 sm:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 relative">
+              <div className="mt-10 sm:mt-12 grid sm:grid-cols-3 gap-5 sm:gap-6 max-w-[900px] mx-auto">
+                {[
+                  { n: '1', icon: Search, t: 'Choose a Service', d: 'Pick the request that matches what you need — Check Challan, Status, Complaint, or Blacklist.' },
+                  { n: '2', icon: UserCheck, t: 'We Verify', d: 'Our team reviews the relevant records by hand — you\u2019ll have your answer within 24 hours.' },
+                  { n: '3', icon: Mail, t: 'Get Your Answer', d: 'We email you the result directly — no need to keep checking back on this page.' },
+                ].map(s => (
+                  <div key={s.n} className="flex flex-col items-center text-center gap-3 rounded-2xl bg-[#F8FAFC] border border-[#0C1E3A]/5 p-5 sm:p-6">
+                    <div className="relative w-12 h-12 rounded-full bg-white border border-[#0C1E3A]/10 grid place-items-center text-[#0C1E3A] shadow-sm">
+                      <s.icon size={18} />
+                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0F766E] text-white grid place-items-center text-[10px] font-[800] border-2 border-white">{s.n}</span>
+                    </div>
+                    <h3 className="text-[14.5px] font-[800] tracking-[-0.01em]">{s.t}</h3>
+                    <p className="text-[13px] leading-6 text-[#4A5A78]">{s.d}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-10 sm:mt-12 max-w-[720px] mx-auto text-center">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] border border-blue-100 px-4 py-2 text-[13px] font-[700] text-[#0C1E3A]">
+                  <Clock3 size={14} className="text-[#0F766E]" /> Choose your service below — answers are emailed within 24 hours.
+                </div>
+              </div>
+
+              <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 relative">
                 <div className="hidden lg:block absolute top-[32px] left-[12%] right-[12%] h-px border-t-2 border-dashed border-[#0C1E3A]/15" />
                 {SERVICE_LIST.map((svc, i) => {
                   const n = String(i + 1).padStart(2, "0")
@@ -611,13 +628,6 @@ export default function PublicApp() {
                     </Link>
                   )
                 })}
-              </div>
-
-              <div className="mt-10 flex justify-center">
-                <button onClick={openForm} className="inline-flex items-center gap-2 bg-white border border-[#0C1E3A]/10 hover:border-[#0C1E3A]/20 rounded-full px-2 py-1.5 pr-1 text-[14px] font-[600] shadow-sm hover:shadow transition active:scale-[0.98]">
-                  <span className="px-4">Ready to start?</span>
-                  <span className="inline-flex items-center gap-1.5 bg-[#0C1E3A] text-white rounded-full px-4 h-8 font-[700]">Request Verification <ArrowRight size={14} /></span>
-                </button>
               </div>
             </div>
           </section>
@@ -641,11 +651,6 @@ export default function PublicApp() {
                       <span className="text-[14px] leading-6 text-[#2E4160] font-[500]">{t}</span>
                     </div>
                   ))}
-                </div>
-
-                <div className="mt-6 rounded-2xl bg-[#FEF2F2] border border-red-200 p-4 flex gap-3 text-[13px] leading-6">
-                  <AlertCircle size={18} className="text-red-600 shrink-0 mt-0.5" />
-                  <div className="text-[#7F1D1D]"><span className="font-[800]">Disclaimer:</span> We do not claim government database access or affiliation. We verify via available records and provide a human-checked summary.</div>
                 </div>
               </div>
 
@@ -748,7 +753,7 @@ export default function PublicApp() {
                   <h2 className="mt-4 text-[30px] sm:text-[44px] font-[900] tracking-[-0.04em] leading-[0.92] text-balance">Ready to Check Your<br /><span className="serif italic font-normal text-[#7EE8DC]">E-Challan?</span></h2>
                   <p className="mt-3 text-[15px] sm:text-[16px] leading-7 text-white/80 max-w-[520px] text-pretty">Submit a verification request and get a human-verified result directly by email. No instant-search gimmicks.</p>
                   <div className="mt-7 flex flex-col sm:flex-row gap-3">
-                    <button onClick={openForm} className="inline-flex items-center justify-center gap-2 bg-white text-[#0C1E3A] rounded-full px-7 h-[52px] text-[15px] font-[800] shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-[#F8FAFC] transition active:scale-[0.98]">
+                    <button onClick={() => scrollTo('how')} className="inline-flex items-center justify-center gap-2 bg-white text-[#0C1E3A] rounded-full px-7 h-[52px] text-[15px] font-[800] shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-[#F8FAFC] transition active:scale-[0.98]">
                       Request Challan Verification <ArrowUpRight size={18} />
                     </button>
                     <button onClick={() => scrollTo('how')} className="inline-flex items-center justify-center gap-2 bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-full px-7 h-[52px] text-[15px] font-[700] transition active:scale-[0.98]">
@@ -1246,7 +1251,6 @@ export default function PublicApp() {
               <ul className="mt-4 grid gap-2.5 text-[14px] font-[500] text-[#2E4160]">
                 <li><Link to="/privacy-policy" className="hover:text-[#0C1E3A] hover:underline underline-offset-4 text-left">Privacy Policy</Link></li>
                 <li><Link to="/terms-and-conditions" className="hover:text-[#0C1E3A] hover:underline underline-offset-4 text-left">Terms &amp; Conditions</Link></li>
-                <li><button onClick={() => showToast("Disclaimer: Not a government website. No official affiliation — every request is verified by our team before a result is emailed.")} className="hover:text-[#0C1E3A] text-left">Disclaimer</button></li>
                 <li className="pt-2 flex items-center gap-2 text-[13px]"><Mail size={14} className="text-[#0F766E]" /> support@karachiechallan.pk</li>
                 <li className="flex items-center gap-2 text-[13px]"><Phone size={14} className="text-[#0F766E]" /> 021-XXXXXXX (10am–6pm)</li>
               </ul>

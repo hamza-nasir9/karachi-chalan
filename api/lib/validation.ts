@@ -16,6 +16,9 @@ export function sanitizeEmail(s: any): string {
 export function digitsOnly(s: any): string { return String(s||"").replace(/\D/g, ""); }
 export function normalizeVehicle(v: any): string { return String(v||"").trim().toUpperCase().replace(/\s+/g, "").replace(/[^A-Z0-9-]/g, "").slice(0, 16); }
 
+/** Kept in sync with src/lib/services.ts VEHICLE_TYPES. */
+export const VEHICLE_TYPES = ["Car", "Motorcycle", "Rickshaw", "Van / Pickup", "Bus / Truck", "Other"];
+
 export interface FieldErrors { [k:string]: string }
 
 export function validatePublicInput(body: any): { valid: boolean; errors: FieldErrors; cleaned?: any } {
@@ -84,7 +87,7 @@ export function validatePublicInput(body: any): { valid: boolean; errors: FieldE
 
 /** Field names each public service accepts. Everything else in the body is ignored. */
 export const SERVICE_FIELDS: Record<RequestType, string[]> = {
-  CHECK_CHALLAN: ["fullName", "cnic", "challanNumber", "phone", "email"],
+  CHECK_CHALLAN: ["fullName", "cnic", "vehicleRegistration", "vehicleType", "challanNumber", "phone", "email"],
   CHALLAN_STATUS: ["challanNumber", "fullName", "email", "phone", "cnic"],
   COMPLAINT_STATUS: ["fullName", "phone", "email", "challanNumber", "complaintNumber"],
   BLACKLIST_BLOCK: ["fullName", "vehicleNumber", "phone", "email"],
@@ -164,6 +167,19 @@ export function validateServiceInput(type: RequestType, body: any): ServiceInput
         if (!v) errors.vehicleNumber = "Vehicle number is required (e.g., KHI-3921).";
         else if (v.length < 3 || v.length > 16) errors.vehicleNumber = "Enter the registration number as shown on the number plate.";
         out.vehicleNumber = v;
+        break;
+      }
+      case "vehicleRegistration": {
+        const v = normalizeVehicle(body.vehicleRegistration);
+        if (!v) errors.vehicleRegistration = "Vehicle registration / number plate is required (e.g., KHI-3921).";
+        else if (v.length < 3 || v.length > 16) errors.vehicleRegistration = "Enter the registration number as shown on the number plate.";
+        out.vehicleRegistration = v;
+        break;
+      }
+      case "vehicleType": {
+        const v = sanitizeString(body.vehicleType, 20);
+        if (!VEHICLE_TYPES.includes(v)) errors.vehicleType = "Select a valid vehicle type.";
+        out.vehicleType = v;
         break;
       }
     }
