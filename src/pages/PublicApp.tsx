@@ -272,7 +272,7 @@ export default function PublicApp() {
       `}</style>
 
       {/* Top micro bar */}
-      <div className="w-full bg-[#0C1E3A] text-white">
+      {/* <div className="w-full bg-[#0C1E3A] text-white">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-[36px] flex items-center justify-between text-[12px] leading-none">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide">
@@ -286,7 +286,7 @@ export default function PublicApp() {
             <a href="mailto:support@asaanchallan.pk" className="hover:text-white inline-flex items-center gap-1.5 focus-visible:rounded-lg"><MailIcon size={12} /> support@asaanchallan.pk</a>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#FDFDFB]/85 backdrop-blur-xl border-b border-[#0C1E3A]/[0.06]">
