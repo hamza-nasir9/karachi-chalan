@@ -1,5 +1,5 @@
 /**
- * Karachi E-Challan — Verification Request Model
+ * Asaan Challan — Verification Request Model
  * Part 3: Backend Request Management Foundation
  *
  * Database-ready architecture. In production replace the Store with Postgres/Prisma.

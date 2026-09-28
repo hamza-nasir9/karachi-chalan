@@ -63,7 +63,7 @@ export default function AdminLogin() {
             </div>
             <div className="mt-8 rounded-xl bg-white text-[#0C1E3A] p-4 text-[12px] leading-5 shadow">
               <div className="font-[800] flex items-center gap-1.5"><AlertCircle size={12} /> Demo credentials</div>
-              <div className="mono mt-1 text-[12px] leading-5">Email: admin@karachiechallan.pk<br />Password: Admin@123</div>
+              <div className="mono mt-1 text-[12px] leading-5">Email: admin@asaanchallan.pk<br />Password: Admin@123</div>
               <div className="mt-2 text-[11px] text-[#64748B]">In production this uses HttpOnly sessions / JWT — this demo mirrors the same route protection.</div>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function AdminLogin() {
                     onChange={e => setEmail(e.target.value)}
                     type="email"
                     autoComplete="email"
-                    placeholder="admin@karachiechallan.pk"
+                    placeholder="admin@asaanchallan.pk"
                     aria-invalid={!!error}
                     className="w-full h-11 rounded-xl border border-[#0C1E3A]/15 bg-white px-4 pr-10 text-[14px] font-[500] outline-none focus:border-[#0C1E3A] focus:ring-4 focus:ring-[#0C1E3A]/10 placeholder:text-[#94A3B8]"
                   />
@@ -129,7 +129,7 @@ export default function AdminLogin() {
               <button disabled={loading} type="submit" className="mt-1 w-full h-11 rounded-full bg-[#0C1E3A] hover:bg-[#0A1933] disabled:opacity-60 active:scale-[0.98] text-white font-[800] text-[14px] inline-flex items-center justify-center gap-2 transition">
                 {loading ? <><Loader2 size={16} className="animate-spin" /> Signing in…</> : <><Lock size={16} /> Sign In</>}
               </button>
-              <p className="text-center text-[11px] leading-4 text-[#64748B]">Demo: <span className="mono font-[600] text-[#0C1E3A]">admin@karachiechallan.pk</span> / <span className="mono font-[600] text-[#0C1E3A]">Admin@123</span></p>
+              <p className="text-center text-[11px] leading-4 text-[#64748B]">Demo: <span className="mono font-[600] text-[#0C1E3A]">admin@asaanchallan.pk</span> / <span className="mono font-[600] text-[#0C1E3A]">Admin@123</span></p>
             </form>
             <p className="mt-6 text-center text-[11px] text-[#64748B]">Secure • Encrypted • Admin-only PII • No PII in URLs</p>
           </div>

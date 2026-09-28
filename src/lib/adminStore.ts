@@ -118,29 +118,29 @@ export function buildEmailDraft(request: VerificationRequest, verification: any)
   if (!verification) {
     return {
       subject: `Update on your E-Challan verification — ${reqId}`,
-      body: `Dear ${name},\n\nWe are reviewing your verification request ${reqId} for vehicle ${vehicle}.\nOur team is checking the relevant records and will email the result within 24–48 working hours.\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+      body: `Dear ${name},\n\nWe are reviewing your verification request ${reqId} for vehicle ${vehicle}.\nOur team is checking the relevant records and will email the result within 24–48 working hours.\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
     };
   }
   switch (verification.outcome) {
     case "CHALLAN_FOUND":
       return {
         subject: `Your E-Challan verification result — ${reqId} — Challan Found`,
-        body: `Dear ${name},\n\nYour verification request ${reqId} for vehicle ${vehicle} has been reviewed.\n\nResult: CHALLAN FOUND\n\nDetails:\n• Challan Number: ${verification.challanNumber || "—"}\n• Violation: ${verification.violation || "—"}\n• Date: ${verification.challanDate || "—"} ${verification.challanTime || ""}\n• Location: ${verification.location || "—"}\n• Fine Amount: ${verification.fineAmount || "—"}\n• Due Date: ${verification.dueDate || "—"}\n• Payment Status: ${verification.paymentStatus || "—"}\n• Reference / PSID: ${verification.referencePsid || "—"}\n\nNotes: ${verification.notes || "Please follow the official payment instructions on the Sindh Traffic Police portal."}\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+        body: `Dear ${name},\n\nYour verification request ${reqId} for vehicle ${vehicle} has been reviewed.\n\nResult: CHALLAN FOUND\n\nDetails:\n• Challan Number: ${verification.challanNumber || "—"}\n• Violation: ${verification.violation || "—"}\n• Date: ${verification.challanDate || "—"} ${verification.challanTime || ""}\n• Location: ${verification.location || "—"}\n• Fine Amount: ${verification.fineAmount || "—"}\n• Due Date: ${verification.dueDate || "—"}\n• Payment Status: ${verification.paymentStatus || "—"}\n• Reference / PSID: ${verification.referencePsid || "—"}\n\nNotes: ${verification.notes || "Please follow the official payment instructions on the Sindh Traffic Police portal."}\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
       };
     case "NO_CHALLAN_FOUND":
       return {
         subject: `Your E-Challan verification result — ${reqId} — No Challan Found`,
-        body: `Dear ${name},\n\nYour verification request ${reqId} for vehicle ${vehicle} has been reviewed.\n\nResult: NO CHALLAN FOUND\n\nAs of the verification time, no active challan was found for the vehicle and details you provided.\n\nNotes: ${verification.notes || "New violations may appear later."}\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+        body: `Dear ${name},\n\nYour verification request ${reqId} for vehicle ${vehicle} has been reviewed.\n\nResult: NO CHALLAN FOUND\n\nAs of the verification time, no active challan was found for the vehicle and details you provided.\n\nNotes: ${verification.notes || "New violations may appear later."}\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
       };
     case "UNABLE_TO_VERIFY":
       return {
         subject: `Your E-Challan verification — ${reqId} — Unable to Verify`,
-        body: `Dear ${name},\n\nWe attempted to verify your request ${reqId} for vehicle ${vehicle}, but we were unable to complete the verification.\n\nReason: ${verification.notes || "Records were temporarily unavailable."}\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+        body: `Dear ${name},\n\nWe attempted to verify your request ${reqId} for vehicle ${vehicle}, but we were unable to complete the verification.\n\nReason: ${verification.notes || "Records were temporarily unavailable."}\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
       };
     case "MORE_INFORMATION_REQUIRED":
       return {
         subject: `Action required — More information for ${reqId}`,
-        body: `Dear ${name},\n\nTo complete the verification for request ${reqId} (vehicle ${vehicle}), we need more information.\n\nRequired: ${verification.notes || "Please reply with a clearer photo of your registration book/card."}\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+        body: `Dear ${name},\n\nTo complete the verification for request ${reqId} (vehicle ${vehicle}), we need more information.\n\nRequired: ${verification.notes || "Please reply with a clearer photo of your registration book/card."}\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
       };
     default:
       return { subject: `Update — ${reqId}`, body: `Dear ${name},\n\nUpdate for ${reqId}.` };

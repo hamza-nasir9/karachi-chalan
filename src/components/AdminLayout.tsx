@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="h-[72px] px-6 flex items-center gap-3 border-b border-white/10 shrink-0">
           <div className="w-10 h-10 rounded-xl bg-white text-[#0C1E3A] grid place-items-center shadow"><ShieldCheck size={18} /></div>
           <div className="leading-tight">
-            <div className="text-[15px] font-[900] tracking-[-0.02em]">Karachi E-Challan</div>
+            <div className="text-[15px] font-[900] tracking-[-0.02em]">Asaan Challan</div>
             <div className="text-[10px] font-[700] tracking-[0.12em] text-[#7EE8DC]">ADMIN PANEL</div>
           </div>
         </div>

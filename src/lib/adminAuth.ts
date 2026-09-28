@@ -97,6 +97,6 @@ export async function checkAuth(): Promise<{ authenticated: boolean; user?: Admi
 
 // Synchronous helper for displaying cached name (not for auth decisions)
 export const ADMIN_CREDENTIALS = {
-  email: "admin@karachiechallan.pk",
+  email: "admin@asaanchallan.pk",
   password: "Admin@123", // only for demo fallback when DB not configured
 };

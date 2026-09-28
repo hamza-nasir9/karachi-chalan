@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, ArrowUpRight, FileSearch, Clock3, CheckCircle2, Award, Ban, AlertTriangle, Eye, Mail, ArrowRight, RefreshCw, ShieldCheck, TrendingUp, Database, AlertCircle, LogOut } from 'lucide-react'
+import { Search, ArrowUpRight, FileSearch, Clock3, CheckCircle2, AlertTriangle, Eye, Mail, ArrowRight, RefreshCw, ShieldCheck, TrendingUp, Database, AlertCircle, LogOut, BadgeCheck, ClipboardCheck, ShieldAlert } from 'lucide-react'
 import { STATUS_LABEL, statusBadge } from '../lib/requestModel'
 import { getService } from '../lib/services'
 import type { VerificationRequest } from '../lib/requestModel'
@@ -10,8 +10,10 @@ interface Stats {
   new: number
   inReview: number
   completed: number
-  challanFound: number
-  noChallanFound: number
+  checkChallan: number
+  challanStatus: number
+  complaintStatus: number
+  blacklistBlock: number
 }
 
 export default function AdminDashboard() {
@@ -22,8 +24,9 @@ export default function AdminDashboard() {
   const [error, setError] = useState<string | null>(null)
   const [dbWarning, setDbWarning] = useState<string | null>(null)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
+  // silent = background refresh: no spinner, keeps the current data on screen.
+  const fetchData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true)
     setError(null)
     setDbWarning(null)
     try {
@@ -72,6 +75,20 @@ export default function AdminDashboard() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
+  // New submissions show up without a manual reload: poll while the tab is visible,
+  // and refresh right away when the admin comes back to the tab.
+  useEffect(() => {
+    const tick = () => { if (document.visibilityState === 'visible') fetchData(true) }
+    const id = window.setInterval(tick, 15000)
+    document.addEventListener('visibilitychange', tick)
+    window.addEventListener('focus', tick)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener('visibilitychange', tick)
+      window.removeEventListener('focus', tick)
+    }
+  }, [fetchData])
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -89,7 +106,7 @@ export default function AdminDashboard() {
             View all requests <ArrowUpRight size={14} />
           </Link>
           <button
-            onClick={fetchData}
+            onClick={() => fetchData()}
             aria-label="Refresh"
             className="h-10 w-10 rounded-full bg-white border border-[#0C1E3A]/10 grid place-items-center hover:bg-[#F8FAFC] active:scale-[0.96] shadow-sm transition"
           >
@@ -117,14 +134,14 @@ export default function AdminDashboard() {
           <div className="flex-1">
             <div className="font-[800]">Failed to load dashboard</div>
             <div>{error}</div>
-            <button onClick={fetchData} className="mt-3 h-8 px-4 rounded-full bg-[#0C1E3A] text-white text-[12px] font-[700]">Retry</button>
+            <button onClick={() => fetchData()} className="mt-3 h-8 px-4 rounded-full bg-[#0C1E3A] text-white text-[12px] font-[700]">Retry</button>
           </div>
         </div>
       )}
 
       {loading ? (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="rounded-[18px] bg-white border border-[#0C1E3A]/5 p-4 sm:p-5 shadow-sm animate-pulse">
               <div className="w-9 h-9 rounded-xl bg-[#F1F5F9]" />
               <div className="mt-4 h-6 w-12 bg-[#F1F5F9] rounded" />
@@ -133,14 +150,16 @@ export default function AdminDashboard() {
           ))}
         </div>
       ) : stats ? (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[
             { label: 'Total Requests', value: stats.total, sub: 'All time', icon: FileSearch, accent: 'bg-[#0C1E3A] text-white' },
             { label: 'New', value: stats.new, sub: 'Needs review', icon: AlertTriangle, accent: 'bg-amber-500 text-white' },
             { label: 'In Review', value: stats.inReview, sub: 'Being checked', icon: Clock3, accent: 'bg-blue-600 text-white' },
             { label: 'Completed', value: stats.completed, sub: 'Emailed', icon: CheckCircle2, accent: 'bg-[#0C1E3A] text-white' },
-            { label: 'Challan Found', value: stats.challanFound, sub: 'Verified hits', icon: Award, accent: 'bg-emerald-600 text-white' },
-            { label: 'No Challan', value: stats.noChallanFound, sub: 'No record', icon: Ban, accent: 'bg-slate-700 text-white' },
+            { label: 'Check Challan', value: stats.checkChallan, sub: 'Requests', icon: FileSearch, accent: 'bg-blue-600 text-white' },
+            { label: 'Challan Status', value: stats.challanStatus, sub: 'Requests', icon: BadgeCheck, accent: 'bg-emerald-600 text-white' },
+            { label: 'Complaint Status', value: stats.complaintStatus, sub: 'Requests', icon: ClipboardCheck, accent: 'bg-amber-600 text-white' },
+            { label: 'Blacklist / Block', value: stats.blacklistBlock, sub: 'Requests', icon: ShieldAlert, accent: 'bg-red-600 text-white' },
           ].map(c => (
             <div key={c.label} className="rounded-[18px] bg-white border border-[#0C1E3A]/5 p-4 sm:p-5 shadow-sm hover:shadow-[0_8px_24px_rgba(12,30,58,0.06)] hover:-translate-y-0.5 transition-all group">
               <div className="flex items-center justify-between">

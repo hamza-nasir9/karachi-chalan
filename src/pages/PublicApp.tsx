@@ -8,7 +8,7 @@ import {
   Shield, Clock, ClipboardCheck, Award, EyeOff, Copy, Check, AlertTriangle,
   Info, ChevronLeft, Loader2, RefreshCw, CalendarDays
 } from 'lucide-react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { submitVerificationRequest } from '../lib/apiClient'
 import { SERVICE_LIST } from '../lib/services'
 
@@ -16,7 +16,7 @@ import { SERVICE_LIST } from '../lib/services'
 const FAQS = [
   { q: "Is this an instant challan search?", a: "No. This is a verification request platform. You submit your vehicle and contact details, our team verifies the relevant records, and we send your challan status to your email. We do not provide instant automated results." },
   { q: "What information do I need to submit?", a: "Vehicle registration number (as on number plate), your full name, mobile number, and email where you want the result. The verification form guides you step-by-step — no login is required." },
-  { q: "How long does verification take?", a: "Most requests are reviewed within 24 hours of submission. You receive a confirmation email with your Request ID immediately, and the final result on the same email once verified." },
+  { q: "How long does verification take?", a: "Most requests are reviewed within 24–48 working hours after submission. You receive a confirmation email with your Request ID immediately, and the final result on the same email once verified." },
   { q: "Is my data secure?", a: "Yes. Your information is transmitted over 256-bit SSL, stored securely and used only to process your verification request. We never share it with third parties and never ask for card OTPs or passwords." },
   { q: "Do you have direct government database access?", a: "We do not claim direct government database access or official affiliation. Our team checks relevant public and records-based sources and compiles a clear, human-verified response. For disputes you are guided to the official Traffic Police channel." },
   { q: "What will I receive in the email?", a: "If a challan exists: challan number, violation type, date & time, location, fine amount, due date and payment status. If no record is found you receive a clear 'No record found' confirmation for your reference." },
@@ -72,6 +72,7 @@ function maskMobile(m: string) {
 }
 
 export default function PublicApp() {
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const [toast, setToast] = useState<string | null>(null)
@@ -123,6 +124,15 @@ export default function PublicApp() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     setMobileOpen(false)
   }
+  // Deep link support: arriving at "/#how" (e.g. the "How It Works" link on a
+  // service form page) should land on the homepage and scroll straight to that
+  // section, the same way the in-page nav buttons above do.
+  useEffect(() => {
+    const id = location.hash?.replace('#', '')
+    if (!id) return
+    const t = setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+    return () => clearTimeout(t)
+  }, [location.hash])
   // NOTE: the legacy single-form flow (view === 'form') below is intentionally no longer
   // reachable from the UI — every CTA now scrolls to the 4-service section instead (see scrollTo('how')
   // above). Left in place, unused, so nothing about the request/admin flow is disturbed.
@@ -273,7 +283,7 @@ export default function PublicApp() {
           <div className="hidden md:flex items-center gap-4 text-white/70 font-medium shrink-0">
             <span className="inline-flex items-center gap-1.5"><Lock size={12} /> Secure & Private</span>
             <span className="w-px h-3 bg-white/15" />
-            <a href="mailto:support@karachiechallan.pk" className="hover:text-white inline-flex items-center gap-1.5 focus-visible:rounded-lg"><MailIcon size={12} /> support@karachiechallan.pk</a>
+            <a href="mailto:support@asaanchallan.pk" className="hover:text-white inline-flex items-center gap-1.5 focus-visible:rounded-lg"><MailIcon size={12} /> support@asaanchallan.pk</a>
           </div>
         </div>
       </div>
@@ -286,7 +296,7 @@ export default function PublicApp() {
               <ShieldCheck size={20} strokeWidth={1.9} />
             </div>
             <div className="leading-tight">
-              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Karachi E-Challan</div>
+              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Asaan Challan</div>
               <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.12em] text-[#0F766E] uppercase">Verification Service</div>
             </div>
           </button>
@@ -434,7 +444,7 @@ export default function PublicApp() {
                   </div>
 
                   <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-3 text-[12.5px] font-medium text-[#64748B]">
-                    <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Answers within 24 hours</span>
+                    <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> 24–48h processing</span>
                     <span className="hidden sm:inline w-px h-3 bg-[#0C1E3A]/10" />
                     <span className="hidden sm:inline">No instant search • No gov affiliation implied</span>
                   </div>
@@ -542,7 +552,7 @@ export default function PublicApp() {
 
               <div className="mt-8 sm:mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { k: "24h", v: "Avg. verification time" }, { k: "100%", v: "Human-reviewed" },
+                  { k: "24–48h", v: "Avg. verification time" }, { k: "100%", v: "Human-reviewed" },
                   { k: "SSL", v: "256-bit encrypted" }, { k: "Email", v: "Result delivery" },
                 ].map(s => (
                   <div key={s.k} className="rounded-2xl bg-white border border-[#0C1E3A]/5 px-4 py-4 flex items-center gap-3 shadow-sm hover:shadow-[0_8px_20px_rgba(12,30,58,0.06)] transition-shadow">
@@ -588,30 +598,32 @@ export default function PublicApp() {
                 <p className="mt-3 text-[15px] sm:text-[16px] leading-6 text-[#4A5A78] text-pretty">Choose a service below — you request, we verify, you get the answer by email. No instant-search promises.</p>
               </div>
 
-              <div className="mt-10 sm:mt-12 grid sm:grid-cols-3 gap-5 sm:gap-6 max-w-[900px] mx-auto">
+              {/* The actual "how it works" steps — what happens after you land here */}
+              <div className="mt-10 sm:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                 {[
-                  { n: '1', icon: Search, t: 'Choose a Service', d: 'Pick the request that matches what you need — Check Challan, Status, Complaint, or Blacklist.' },
-                  { n: '2', icon: UserCheck, t: 'We Verify', d: 'Our team reviews the relevant records by hand — you\u2019ll have your answer within 24 hours.' },
-                  { n: '3', icon: Mail, t: 'Get Your Answer', d: 'We email you the result directly — no need to keep checking back on this page.' },
+                  { n: '1', icon: Search, title: 'Choose Your Service', desc: 'Pick the verification you need from the four services below.' },
+                  { n: '2', icon: ClipboardCheck, title: 'Fill the Form', desc: 'Share your details in a couple of minutes — no login or account required.' },
+                  { n: '3', icon: UserCheck, title: 'We Verify', desc: 'Our team manually checks the relevant records for your request.' },
+                  { n: '4', icon: Mail, title: 'Get Your Result', desc: 'We email a clear outcome, usually within 24–48 working hours.' },
                 ].map(s => (
-                  <div key={s.n} className="flex flex-col items-center text-center gap-3 rounded-2xl bg-[#F8FAFC] border border-[#0C1E3A]/5 p-5 sm:p-6">
-                    <div className="relative w-12 h-12 rounded-full bg-white border border-[#0C1E3A]/10 grid place-items-center text-[#0C1E3A] shadow-sm">
+                  <div key={s.n} className="rounded-2xl border border-[#0C1E3A]/[0.06] bg-[#FDFDFB] p-5 text-center">
+                    <div className="w-11 h-11 mx-auto rounded-xl bg-[#0C1E3A] text-white grid place-items-center shadow-sm relative">
                       <s.icon size={18} />
                       <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0F766E] text-white grid place-items-center text-[10px] font-[800] border-2 border-white">{s.n}</span>
                     </div>
-                    <h3 className="text-[14.5px] font-[800] tracking-[-0.01em]">{s.t}</h3>
-                    <p className="text-[13px] leading-6 text-[#4A5A78]">{s.d}</p>
+                    <h3 className="mt-3 text-[13.5px] font-[800]">{s.title}</h3>
+                    <p className="mt-1.5 text-[12.5px] leading-5 text-[#5B6B85]">{s.desc}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-10 sm:mt-12 max-w-[720px] mx-auto text-center">
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] border border-blue-100 px-4 py-2 text-[13px] font-[700] text-[#0C1E3A]">
-                  <Clock3 size={14} className="text-[#0F766E]" /> Choose your service below — answers are emailed within 24 hours.
-                </div>
+              <div className="mt-10 sm:mt-12 flex items-center gap-3 max-w-[1200px]">
+                <div className="h-px flex-1 bg-[#0C1E3A]/[0.06]" />
+                <span className="text-[11px] font-[800] tracking-[0.14em] text-[#0F766E] whitespace-nowrap">STEP 1 — CHOOSE A SERVICE</span>
+                <div className="h-px flex-1 bg-[#0C1E3A]/[0.06]" />
               </div>
 
-              <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 relative">
+              <div className="mt-8 sm:mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 relative">
                 <div className="hidden lg:block absolute top-[32px] left-[12%] right-[12%] h-px border-t-2 border-dashed border-[#0C1E3A]/15" />
                 {SERVICE_LIST.map((svc, i) => {
                   const n = String(i + 1).padStart(2, "0")
@@ -790,7 +802,7 @@ export default function PublicApp() {
                       ))}
                     </div>
                     <div className="mt-5 rounded-xl bg-[#0C1E3A] text-white px-4 py-3 flex items-center justify-between gap-2 text-[12px] font-medium">
-                      <span className="inline-flex items-center gap-2 truncate"><Mail size={14} className="shrink-0" /> support@karachiechallan.pk</span>
+                      <span className="inline-flex items-center gap-2 truncate"><Mail size={14} className="shrink-0" /> support@asaanchallan.pk</span>
                       <span className="opacity-70 hidden sm:inline shrink-0">Verified • Secure</span>
                     </div>
                   </div>
@@ -1108,7 +1120,7 @@ export default function PublicApp() {
                         <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} className="mt-0.5 w-5 h-5 rounded border-2 border-[#0C1E3A]/20 accent-[#0C1E3A] shrink-0" />
                         <span className="text-[13px] leading-6">
                           <span className="font-[700]">I confirm</span> that the information is accurate and I consent to its use for verification. I understand this is <span className="font-[700]">not an instant search</span> and results are emailed after verification.
-                          <span className="block mt-1 text-[11.5px] text-[#5B6B85]">Request data deletion after verification via support@karachiechallan.pk.</span>
+                          <span className="block mt-1 text-[11.5px] text-[#5B6B85]">Request data deletion after verification via support@asaanchallan.pk.</span>
                         </span>
                       </label>
                     </div>
@@ -1212,7 +1224,7 @@ export default function PublicApp() {
                   <button onClick={() => { setView('form'); setStep(1); setRequestId(""); setIsDuplicate(false) }} className="h-[48px] px-8 rounded-full bg-white border border-[#0C1E3A]/10 font-[700] inline-flex items-center justify-center gap-2 hover:bg-[#F8FAFC] active:scale-[0.98]">Submit another <RefreshCw size={16} /></button>
                 </div>
 
-                <p className="mt-6 text-[12px] leading-5 text-[#64748B]">Need help? <a href="mailto:support@karachiechallan.pk" className="underline decoration-dotted font-[600] text-[#0C1E3A] hover:text-[#0F766E]">support@karachiechallan.pk</a> with your Request ID.</p>
+                <p className="mt-6 text-[12px] leading-5 text-[#64748B]">Need help? <a href="mailto:support@asaanchallan.pk" className="underline decoration-dotted font-[600] text-[#0C1E3A] hover:text-[#0F766E]">support@asaanchallan.pk</a> with your Request ID.</p>
               </div>
             </motion.div>
           </div>
@@ -1227,11 +1239,11 @@ export default function PublicApp() {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[#0C1E3A] grid place-items-center text-white"><ShieldCheck size={18} /></div>
                 <div>
-                  <div className="text-[15px] font-[900] tracking-[-0.02em] leading-none">Karachi E-Challan</div>
+                  <div className="text-[15px] font-[900] tracking-[-0.02em] leading-none">Asaan Challan</div>
                   <div className="text-[11px] font-[700] tracking-[0.1em] text-[#0F766E] uppercase">Verification Request Platform</div>
                 </div>
               </div>
-              <p className="mt-4 text-[13.5px] leading-6 text-[#4A5A78] max-w-[420px] text-pretty">Premium verification for Karachi E-Challan. We review and email results — no instant lookup.</p>
+              <p className="mt-4 text-[13.5px] leading-6 text-[#4A5A78] max-w-[420px] text-pretty">Premium verification for Asaan Challan. We review and email results — no instant lookup.</p>
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#F1F5F9] border border-[#0C1E3A]/5 px-3 py-2 text-[12px] font-[600] text-[#2E4160]">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Verified • Secure • Transparent
               </div>
@@ -1251,13 +1263,13 @@ export default function PublicApp() {
               <ul className="mt-4 grid gap-2.5 text-[14px] font-[500] text-[#2E4160]">
                 <li><Link to="/privacy-policy" className="hover:text-[#0C1E3A] hover:underline underline-offset-4 text-left">Privacy Policy</Link></li>
                 <li><Link to="/terms-and-conditions" className="hover:text-[#0C1E3A] hover:underline underline-offset-4 text-left">Terms &amp; Conditions</Link></li>
-                <li className="pt-2 flex items-center gap-2 text-[13px]"><Mail size={14} className="text-[#0F766E]" /> support@karachiechallan.pk</li>
+                <li className="pt-2 flex items-center gap-2 text-[13px]"><Mail size={14} className="text-[#0F766E]" /> support@asaanchallan.pk</li>
                 <li className="flex items-center gap-2 text-[13px]"><Phone size={14} className="text-[#0F766E]" /> 021-XXXXXXX (10am–6pm)</li>
               </ul>
             </div>
           </div>
           <div className="mt-10 pt-6 border-t border-[#0C1E3A]/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] leading-5">
-            <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Karachi E-Challan. All rights reserved. Not a government website.</span>
+            <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Asaan Challan. All rights reserved. Not a government website.</span>
             <span className="inline-flex items-center gap-2 font-[600] text-[#0C1E3A] shrink-0"><Shield size={14} className="text-[#0F766E]" /> Secure • Verified • Transparent</span>
           </div>
         </div>

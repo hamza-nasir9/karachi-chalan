@@ -58,7 +58,7 @@ export default function TermsAndConditions() {
           <div className="hidden md:flex items-center gap-4 text-white/70 font-medium shrink-0">
             <span className="inline-flex items-center gap-1.5"><Lock size={12} /> Secure & Private</span>
             <span className="w-px h-3 bg-white/15" />
-            <a href="mailto:support@karachiechallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@karachiechallan.pk</a>
+            <a href="mailto:support@asaanchallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@asaanchallan.pk</a>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function TermsAndConditions() {
               <ShieldCheck size={20} strokeWidth={1.9} />
             </div>
             <div className="leading-tight">
-              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Karachi E-Challan</div>
+              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Asaan Challan</div>
               <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.12em] text-[#0F766E] uppercase">Verification Service</div>
             </div>
           </Link>
@@ -98,7 +98,7 @@ export default function TermsAndConditions() {
               Terms &amp; <span className="serif italic font-normal text-[#0F766E]">Conditions</span>
             </h1>
             <p className="mt-3 text-[14px] sm:text-[15px] leading-7 text-[#4A5A78]">
-              These Terms &amp; Conditions govern your use of Karachi E-Challan and its verification request services. By submitting a request through this website, you agree to these terms.
+              These Terms &amp; Conditions govern your use of Asaan Challan and its verification request services. By submitting a request through this website, you agree to these terms.
             </p>
             <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white border border-[#0C1E3A]/10 px-3.5 py-2 text-[12px] font-[700] text-[#5B6B85] shadow-sm">
               <Clock3 size={13} className="text-[#0F766E]" /> Last Updated: {LAST_UPDATED}
@@ -120,7 +120,7 @@ export default function TermsAndConditions() {
             <div className="bg-white rounded-[24px] border border-[#0C1E3A]/[0.06] shadow-[0_16px_48px_rgba(12,30,58,0.06)] p-6 sm:p-10 min-w-0">
               <div className="rounded-xl bg-[#EFF6FF] border border-blue-100 px-4 py-3 flex gap-2.5 text-[12.5px] leading-5 text-[#1E3A5F] mb-8">
                 <AlertCircle size={16} className="shrink-0 mt-0.5" />
-                <span>Karachi E-Challan is an independent verification request platform. It is <span className="font-[700]">not a government website</span> and has no official affiliation with any traffic police department or government body.</span>
+                <span>Asaan Challan is an independent verification request platform. It is <span className="font-[700]">not a government website</span> and has no official affiliation with any traffic police department or government body.</span>
               </div>
 
               <Section id="acceptance" title="Acceptance of Terms" icon={CheckCircle2}>
@@ -128,7 +128,7 @@ export default function TermsAndConditions() {
               </Section>
 
               <Section id="description" title="Description of Service" icon={FileText}>
-                <p>Karachi E-Challan is a verification request platform. You submit a request — Check Challan, Challan Paid / Unpaid / Waived, Check Complaint Status, or Check Blacklist / Block — through the relevant form, our team reviews the available records, and we email you the outcome.</p>
+                <p>Asaan Challan is a verification request platform. You submit a request — Check Challan, Challan Paid / Unpaid / Waived, Check Complaint Status, or Check Blacklist / Block — through the relevant form, our team reviews the available records, and we email you the outcome.</p>
                 <p>This is not an instant, automated lookup service, and results are not displayed on the website itself. We do not claim government database access or official affiliation, and we do not process challan payments on this website.</p>
               </Section>
 
@@ -142,7 +142,7 @@ export default function TermsAndConditions() {
               </Section>
 
               <Section id="submitted-information" title="Submitted Information" icon={FileText}>
-                <p>Each service form requests the details necessary to process that specific type of request (for example, CNIC and challan number for a Check Challan request, or a vehicle number for a Blacklist / Block check). Submitting a request means you consent to our team using this information to review and respond to it, as described in our Privacy Policy.</p>
+                <p>Each service form requests the details necessary to process that specific type of request (for example, CNIC and vehicle registration for a Check Challan request, or a vehicle number for a Blacklist / Block check). Submitting a request means you consent to our team using this information to review and respond to it, as described in our Privacy Policy.</p>
                 <p>Providing inaccurate or incomplete information may result in a request that cannot be verified, is delayed, or is marked as requiring more information.</p>
               </Section>
 
@@ -168,12 +168,12 @@ export default function TermsAndConditions() {
               </Section>
 
               <Section id="accuracy-liability" title="Accuracy & Limitation of Liability" icon={AlertTriangle}>
-                <p>We take reasonable care when reviewing and reporting a result, but Karachi E-Challan is an independent verification request service and results are provided based on the records available to our team at the time of review. We do not guarantee that a result is complete, current, or free of error, and we recommend confirming any important matter with the relevant official source before relying on it.</p>
-                <p>To the fullest extent permitted by law, Karachi E-Challan and its team are not liable for any loss or damage arising from your use of this website or reliance on a result we provide, including delays in processing or in email delivery.</p>
+                <p>We take reasonable care when reviewing and reporting a result, but Asaan Challan is an independent verification request service and results are provided based on the records available to our team at the time of review. We do not guarantee that a result is complete, current, or free of error, and we recommend confirming any important matter with the relevant official source before relying on it.</p>
+                <p>To the fullest extent permitted by law, Asaan Challan and its team are not liable for any loss or damage arising from your use of this website or reliance on a result we provide, including delays in processing or in email delivery.</p>
               </Section>
 
               <Section id="intellectual-property" title="Intellectual Property" icon={Shield}>
-                <p>The Karachi E-Challan name, design, layout, and written content on this website are provided for use of this service and may not be copied, reproduced, or used for any other purpose without our permission. This does not affect your own submitted information, which remains yours as described in our Privacy Policy.</p>
+                <p>The Asaan Challan name, design, layout, and written content on this website are provided for use of this service and may not be copied, reproduced, or used for any other purpose without our permission. This does not affect your own submitted information, which remains yours as described in our Privacy Policy.</p>
               </Section>
 
               <Section id="changes" title="Changes to the Service or Terms" icon={RefreshCw}>
@@ -190,8 +190,8 @@ export default function TermsAndConditions() {
 
               <Section id="contact" title="Contact Information" icon={Mail}>
                 <p>If you have any questions about these Terms &amp; Conditions, please contact us:</p>
-                <a href="mailto:support@karachiechallan.pk" className="inline-flex items-center gap-2 mt-1 rounded-full bg-[#0C1E3A] text-white px-4 py-2 text-[13px] font-[700] hover:bg-[#0A1933] transition">
-                  <Mail size={14} /> support@karachiechallan.pk
+                <a href="mailto:support@asaanchallan.pk" className="inline-flex items-center gap-2 mt-1 rounded-full bg-[#0C1E3A] text-white px-4 py-2 text-[13px] font-[700] hover:bg-[#0A1933] transition">
+                  <Mail size={14} /> support@asaanchallan.pk
                 </a>
               </Section>
             </div>
@@ -201,7 +201,7 @@ export default function TermsAndConditions() {
 
       <footer className="bg-white border-t border-[#0C1E3A]/5">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] leading-5">
-          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Karachi E-Challan. All rights reserved. Not a government website.</span>
+          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Asaan Challan. All rights reserved. Not a government website.</span>
           <span className="inline-flex items-center gap-2 font-[600] text-[#0C1E3A] shrink-0"><Shield size={14} className="text-[#0F766E]" /> Secure • Verified • Transparent</span>
         </div>
       </footer>

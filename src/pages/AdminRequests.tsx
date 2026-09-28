@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Filter, Eye, ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, Inbox, ShieldCheck, AlertTriangle, RefreshCw } from 'lucide-react'
+import { Search, Filter, Eye, ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, Inbox, ShieldCheck, AlertTriangle, RefreshCw, LayoutGrid } from 'lucide-react'
 import { RequestStatus, STATUS_LABEL, statusBadge as badge, type RequestStatusType, type VerificationRequest } from '../lib/requestModel'
-import { getService } from '../lib/services'
+import { getService, SERVICE_LIST, type RequestType } from '../lib/services'
 
 const FILTERS: Array<{ label: string; value: RequestStatusType | 'ALL' }> = [
   { label: 'All', value: 'ALL' },
@@ -10,6 +10,12 @@ const FILTERS: Array<{ label: string; value: RequestStatusType | 'ALL' }> = [
   { label: 'In Review', value: RequestStatus.IN_REVIEW },
   { label: 'Result Ready', value: RequestStatus.RESULT_READY },
   { label: 'Completed', value: RequestStatus.COMPLETED },
+]
+
+// "All Requests" plus one tab per public service — filtered views of the same collection.
+const SERVICE_TABS: Array<{ label: string; value: RequestType | 'ALL' }> = [
+  { label: 'All Requests', value: 'ALL' },
+  ...SERVICE_LIST.map(s => ({ label: s.badge, value: s.type })),
 ]
 
 function maskCNIC(d: string) {
@@ -27,6 +33,7 @@ export default function AdminRequests() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<RequestStatusType | 'ALL'>('ALL')
+  const [requestType, setRequestType] = useState<RequestType | 'ALL'>('ALL')
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest')
   const [page, setPage] = useState(1)
   const pageSize = 10
@@ -36,13 +43,15 @@ export default function AdminRequests() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
+  // silent = background refresh: no spinner, keeps the current rows on screen.
+  const fetchData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true)
     setError(null)
     try {
       const params = new URLSearchParams()
       if (search) params.set('search', search)
       if (status) params.set('status', status)
+      if (requestType !== 'ALL') params.set('requestType', requestType)
       params.set('page', String(page))
       params.set('pageSize', String(pageSize))
       params.set('sort', sort)
@@ -57,14 +66,26 @@ export default function AdminRequests() {
       setTotal(json.data.total || 0)
     } catch (e: any) {
       setError(e.message || 'Failed to load requests')
-      setItems([])
-      setTotal(0)
+      if (!silent) { setItems([]); setTotal(0) } // a failed background refresh keeps the rows already shown
     } finally {
       setLoading(false)
     }
-  }, [search, status, page, sort, navigate])
+  }, [search, status, requestType, page, sort, navigate])
 
   useEffect(() => { fetchData() }, [fetchData])
+
+  // Pick up new submissions automatically (visible tab only) and on returning to the tab.
+  useEffect(() => {
+    const tick = () => { if (document.visibilityState === 'visible') fetchData(true) }
+    const id = window.setInterval(tick, 15000)
+    document.addEventListener('visibilitychange', tick)
+    window.addEventListener('focus', tick)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener('visibilitychange', tick)
+      window.removeEventListener('focus', tick)
+    }
+  }, [fetchData])
 
   const pages = Math.max(1, Math.ceil(total / pageSize))
 
@@ -75,6 +96,22 @@ export default function AdminRequests() {
         <p className="text-[13.5px] text-[#5B6B85] mt-1.5 leading-6 max-w-[640px]">
           Search and filter real verification requests from <span className="font-[700] text-[#0C1E3A]">MongoDB</span>. All personal data is admin-only — CNIC & mobile masked in list, never in URL.
         </p>
+      </div>
+
+      <div className="bg-white rounded-[18px] border border-[#0C1E3A]/5 p-2.5 flex items-center gap-2 shadow-sm overflow-x-auto">
+        <span className="inline-flex items-center gap-1.5 pl-2 pr-1 text-[11px] font-[800] tracking-[0.08em] text-[#5B6B85] shrink-0"><LayoutGrid size={12} /> SERVICE</span>
+        {SERVICE_TABS.map(t => {
+          const active = requestType === t.value
+          return (
+            <button
+              key={t.value}
+              onClick={() => { setRequestType(t.value); setPage(1) }}
+              className={`shrink-0 h-9 px-4 rounded-full text-[12.5px] font-[700] border transition whitespace-nowrap ${active ? 'bg-[#0C1E3A] border-[#0C1E3A] text-white shadow-sm' : 'bg-white border-[#0C1E3A]/10 text-[#5B6B85] hover:bg-[#F8FAFC] hover:text-[#0C1E3A]'}`}
+            >
+              {t.label}
+            </button>
+          )
+        })}
       </div>
 
       <div className="bg-white rounded-[18px] border border-[#0C1E3A]/5 p-4 flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between shadow-sm">
@@ -109,13 +146,13 @@ export default function AdminRequests() {
         <div className="rounded-2xl bg-[#FEF2F2] border border-red-200 px-4 py-3 flex gap-3 text-[13px] leading-5 text-[#7F1D1D]">
           <AlertTriangle size={16} className="shrink-0 mt-0.5 text-red-600" />
           <span className="flex-1">{error}</span>
-          <button onClick={fetchData} className="shrink-0 h-8 px-3 rounded-full bg-white border border-red-200 text-[12px] font-[700] inline-flex items-center gap-1"><RefreshCw size={12} /> Retry</button>
+          <button onClick={() => fetchData()} className="shrink-0 h-8 px-3 rounded-full bg-white border border-red-200 text-[12px] font-[700] inline-flex items-center gap-1"><RefreshCw size={12} /> Retry</button>
         </div>
       )}
 
       <div className="bg-white rounded-[18px] border border-[#0C1E3A]/5 shadow-sm overflow-hidden">
         <div className="px-5 py-3 flex items-center justify-between text-[12px] font-medium text-[#5B6B85] bg-[#F8FAFC] border-b border-[#0C1E3A]/5">
-          <span className="inline-flex items-center gap-2"><SlidersHorizontal size={12} /> {loading ? 'Loading…' : `${total} result${total !== 1 ? 's' : ''}`} {search && <>for “<span className="font-[700] text-[#0C1E3A]">{search}</span>”</>} {status !== 'ALL' && <>• {(STATUS_LABEL as any)[status]}</>}</span>
+          <span className="inline-flex items-center gap-2"><SlidersHorizontal size={12} /> {loading ? 'Loading…' : `${total} result${total !== 1 ? 's' : ''}`} {search && <>for “<span className="font-[700] text-[#0C1E3A]">{search}</span>”</>} {status !== 'ALL' && <>• {(STATUS_LABEL as any)[status]}</>} {requestType !== 'ALL' && <>• {getService(requestType).badge}</>}</span>
           <span className="hidden sm:inline font-[700]">Page {page} of {pages}</span>
         </div>
 
@@ -154,8 +191,8 @@ export default function AdminRequests() {
                       <div className="w-12 h-12 mx-auto rounded-2xl bg-[#F1F5F9] border border-[#0C1E3A]/5 grid place-items-center text-[#64748B]"><Inbox size={20} /></div>
                       <div className="mt-3 text-[14px] font-[800] text-[#0C1E3A]">No matching requests</div>
                       <div className="mt-1 text-[13px] leading-5 text-[#5B6B85]">Try adjusting search or filters. Or submit a new verification on the public site — data is read directly from MongoDB.</div>
-                      {(search || status !== 'ALL') && (
-                        <button onClick={() => { setSearch(''); setStatus('ALL'); setPage(1) }} className="mt-4 h-9 px-4 rounded-full bg-[#0C1E3A] text-white text-[13px] font-[700]">Clear filters</button>
+                      {(search || status !== 'ALL' || requestType !== 'ALL') && (
+                        <button onClick={() => { setSearch(''); setStatus('ALL'); setRequestType('ALL'); setPage(1) }} className="mt-4 h-9 px-4 rounded-full bg-[#0C1E3A] text-white text-[13px] font-[700]">Clear filters</button>
                       )}
                     </div>
                   </td>

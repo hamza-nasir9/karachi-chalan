@@ -26,8 +26,8 @@ export function getEmailConfigRequirements(): string[] {
     "SMTP_PORT — e.g. 587 (STARTTLS) or 465 (implicit TLS)",
     "SMTP_USER — SMTP account username",
     "SMTP_PASSWORD — SMTP account password",
-    "SMTP_FROM — e.g. noreply@karachiechallan.pk",
-    "SMTP_FROM_NAME — e.g. Karachi E-Challan (optional, defaults to this)",
+    "SMTP_FROM — e.g. noreply@asaanchallan.pk",
+    "SMTP_FROM_NAME — e.g. Asaan Challan (optional, defaults to this)",
     "Set all in your environment variables, then redeploy",
   ];
 }
@@ -66,8 +66,8 @@ export function prepareVerificationEmail(request: VerificationRequest, verificat
   const vehicle = request.vehicleRegistrationNumber || challanNo || "—";
   // Requests from the Check Challan form have no vehicle — refer to the challan number instead.
   const refPhrase = request.vehicleRegistrationNumber ? `vehicle ${request.vehicleRegistrationNumber}` : `challan ${challanNo || "reference"}`;
-  const baseFooter = `<p style="margin:16px 0 0;color:#64748B;font-size:12px;line-height:1.6">— Karachi E-Challan Verification Team<br><a href="mailto:support@karachiechallan.pk" style="color:#0F766E;text-decoration:none">support@karachiechallan.pk</a></p>`;
-  const textFooter = `\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`;
+  const baseFooter = `<p style="margin:16px 0 0;color:#64748B;font-size:12px;line-height:1.6">— Asaan Challan Verification Team<br><a href="mailto:support@asaanchallan.pk" style="color:#0F766E;text-decoration:none">support@asaanchallan.pk</a></p>`;
+  const textFooter = `\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`;
   switch (verification.outcome) {
     case "CHALLAN_FOUND": {
       const subject = `Your E-Challan verification — ${reqId} — Challan Found`;
@@ -184,7 +184,7 @@ export function prepareServiceEmail(request: VerificationRequest, verification: 
     `\n${sentence}\n` +
     (verification.notes ? `\n${notesLabel}: ${verification.notes}\n` : "") +
     (needsAction ? `\nPlease reply to this email with the requested details.\n` : "") +
-    `\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`;
+    `\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`;
 
   const rows = refs.map(([k, v]) =>
     `<tr><td style="padding:8px 12px;border:1px solid #E2E8F0;color:#5B6B85;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;">${esc(k)}</td><td style="padding:8px 12px;border:1px solid #E2E8F0;font-size:13px;font-weight:600;color:#0C1E3A;font-family:JetBrains Mono,monospace">${esc(v)}</td></tr>`).join("");
@@ -194,7 +194,7 @@ export function prepareServiceEmail(request: VerificationRequest, verification: 
     ${rows ? `<div style="margin:16px 0"><table style="width:100%;border-collapse:collapse">${rows}</table></div>` : ""}
     <div style="margin:14px 0;background:${tone.bg};border:1px solid ${tone.border};border-radius:12px;padding:14px;font-size:13px">${esc(sentence)}</div>
     ${verification.notes ? `<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:12px 14px;font-size:13px"><strong>${notesLabel}:</strong> ${esc(verification.notes)}</div>` : ""}
-    <p style="margin:16px 0 0;color:#64748B;font-size:12px;line-height:1.6">— Karachi E-Challan Verification Team<br><a href="mailto:support@karachiechallan.pk" style="color:#0F766E;text-decoration:none">support@karachiechallan.pk</a></p>
+    <p style="margin:16px 0 0;color:#64748B;font-size:12px;line-height:1.6">— Asaan Challan Verification Team<br><a href="mailto:support@asaanchallan.pk" style="color:#0F766E;text-decoration:none">support@asaanchallan.pk</a></p>
   </div>`;
   return { to: request.email, subject, text, html, templateId: verification.outcome };
 }
@@ -212,7 +212,7 @@ export function prepareHoldingDraft(request: VerificationRequest): { subject: st
   const firstName = request.fullName.split(" ")[0] || request.fullName;
   return {
     subject: `Update on your ${service.title} request — ${request.requestId}`,
-    text: `Dear ${firstName},\n\nWe are reviewing your ${service.emailSubject} ${request.requestId}.\nOur team is checking the relevant records and will email the result within 24 hours.\n\n— Karachi E-Challan Verification Team\nsupport@karachiechallan.pk`,
+    text: `Dear ${firstName},\n\nWe are reviewing your ${service.emailSubject} ${request.requestId}.\nOur team is checking the relevant records and will email the result within 24–48 working hours.\n\n— Asaan Challan Verification Team\nsupport@asaanchallan.pk`,
   };
 }
 

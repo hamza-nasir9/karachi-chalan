@@ -40,7 +40,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
 
   useEffect(() => {
     const prev = document.title
-    document.title = `${service.title} — Karachi E-Challan`
+    document.title = `${service.title} — Asaan Challan`
     return () => { document.title = prev }
   }, [service.title])
   const succeeded = phase === 'success'
@@ -140,7 +140,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
           <div className="hidden md:flex items-center gap-4 text-white/70 font-medium shrink-0">
             <span className="inline-flex items-center gap-1.5"><Lock size={12} /> Secure & Private</span>
             <span className="w-px h-3 bg-white/15" />
-            <a href="mailto:support@karachiechallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@karachiechallan.pk</a>
+            <a href="mailto:support@asaanchallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@asaanchallan.pk</a>
           </div>
         </div>
       </div>
@@ -152,11 +152,12 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
               <ShieldCheck size={20} strokeWidth={1.9} />
             </div>
             <div className="leading-tight">
-              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Karachi E-Challan</div>
+              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Asaan Challan</div>
               <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.12em] text-[#0F766E] uppercase">Verification Service</div>
             </div>
           </Link>
           <div className="hidden lg:flex items-center gap-2 text-[13px] font-medium text-[#5B6B85]">
+            <Link to="/#how" className="hover:text-[#0C1E3A] font-[700] px-3 py-1.5">How It Works</Link>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#0C1E3A]/10 px-3 py-1.5 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500" /> Secure form
             </span>
@@ -342,7 +343,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
 
                 <div className="mt-6 rounded-2xl bg-[#EFF6FF] border border-blue-100 p-4 text-left flex gap-3 text-[13px] leading-6 text-[#1E3A5F]">
                   <Clock3 size={18} className="shrink-0 mt-0.5 text-[#0C1E3A]" />
-                  <div><span className="font-[700]">What’s next?</span> A team member reviews your request and emails the result within 24 hours. If you don’t see it, check your spam folder.</div>
+                  <div><span className="font-[700]">What’s next?</span> A team member reviews your request and emails the result to the address above. If you don’t see it, check your spam folder.</div>
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
@@ -350,7 +351,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
                   <button type="button" onClick={startAnother} className="h-[48px] px-8 rounded-full bg-white border border-[#0C1E3A]/10 font-[700] inline-flex items-center justify-center gap-2 hover:bg-[#F8FAFC] active:scale-[0.98]">Submit another <RefreshCw size={16} /></button>
                 </div>
 
-                <p className="mt-6 text-[12px] leading-5 text-[#64748B]">Need help? <a href="mailto:support@karachiechallan.pk" className="underline decoration-dotted font-[600] text-[#0C1E3A] hover:text-[#0F766E]">support@karachiechallan.pk</a> with your Request ID.</p>
+                <p className="mt-6 text-[12px] leading-5 text-[#64748B]">Need help? <a href="mailto:support@asaanchallan.pk" className="underline decoration-dotted font-[600] text-[#0C1E3A] hover:text-[#0F766E]">support@asaanchallan.pk</a> with your Request ID.</p>
               </div>
             </motion.div>
           </div>
@@ -359,7 +360,7 @@ function ServiceRequestForm({ service }: { service: ServiceDef }) {
 
       <footer className="bg-white border-t border-[#0C1E3A]/5">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] leading-5">
-          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Karachi E-Challan. All rights reserved. Not a government website.</span>
+          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Asaan Challan. All rights reserved. Not a government website.</span>
           <span className="inline-flex items-center gap-2 font-[600] text-[#0C1E3A] shrink-0"><Shield size={14} className="text-[#0F766E]" /> Secure • Verified • Transparent</span>
         </div>
       </footer>

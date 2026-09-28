@@ -57,7 +57,7 @@ export default function PrivacyPolicy() {
           <div className="hidden md:flex items-center gap-4 text-white/70 font-medium shrink-0">
             <span className="inline-flex items-center gap-1.5"><Lock size={12} /> Secure & Private</span>
             <span className="w-px h-3 bg-white/15" />
-            <a href="mailto:support@karachiechallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@karachiechallan.pk</a>
+            <a href="mailto:support@asaanchallan.pk" className="hover:text-white inline-flex items-center gap-1.5"><Mail size={12} /> support@asaanchallan.pk</a>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
               <ShieldCheck size={20} strokeWidth={1.9} />
             </div>
             <div className="leading-tight">
-              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Karachi E-Challan</div>
+              <div className="text-[16px] sm:text-[17px] font-[900] tracking-[-0.03em] leading-none">Asaan Challan</div>
               <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.12em] text-[#0F766E] uppercase">Verification Service</div>
             </div>
           </Link>
@@ -97,7 +97,7 @@ export default function PrivacyPolicy() {
               Privacy <span className="serif italic font-normal text-[#0F766E]">Policy</span>
             </h1>
             <p className="mt-3 text-[14px] sm:text-[15px] leading-7 text-[#4A5A78]">
-              This Privacy Policy explains what information Karachi E-Challan collects through its verification request forms, how that information is used and stored, and the choices available to you. It applies to karachiechallan.pk and the verification services described on this website.
+              This Privacy Policy explains what information Asaan Challan collects through its verification request forms, how that information is used and stored, and the choices available to you. It applies to asaanchallan.pk and the verification services described on this website.
             </p>
             <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white border border-[#0C1E3A]/10 px-3.5 py-2 text-[12px] font-[700] text-[#5B6B85] shadow-sm">
               <Clock3 size={13} className="text-[#0F766E]" /> Last Updated: {LAST_UPDATED}
@@ -119,11 +119,11 @@ export default function PrivacyPolicy() {
             <div className="bg-white rounded-[24px] border border-[#0C1E3A]/[0.06] shadow-[0_16px_48px_rgba(12,30,58,0.06)] p-6 sm:p-10 min-w-0">
               <div className="rounded-xl bg-[#EFF6FF] border border-blue-100 px-4 py-3 flex gap-2.5 text-[12.5px] leading-5 text-[#1E3A5F] mb-8">
                 <AlertCircle size={16} className="shrink-0 mt-0.5" />
-                <span>Karachi E-Challan is an independent verification request platform. It is <span className="font-[700]">not a government website</span> and has no official affiliation with any traffic police department or government body.</span>
+                <span>Asaan Challan is an independent verification request platform. It is <span className="font-[700]">not a government website</span> and has no official affiliation with any traffic police department or government body.</span>
               </div>
 
               <Section id="overview" title="Overview" icon={FileText}>
-                <p>Karachi E-Challan lets you submit a request — Check Challan, Challan Paid / Unpaid / Waived, Check Complaint Status, or Check Blacklist / Block — and our team reviews the relevant records before emailing you the result. We do not display results instantly on the website.</p>
+                <p>Asaan Challan lets you submit a request — Check Challan, Challan Paid / Unpaid / Waived, Check Complaint Status, or Check Blacklist / Block — and our team reviews the relevant records before emailing you the result. We do not display results instantly on the website.</p>
                 <p>This policy covers the information collected when you submit a request through one of these forms, and how it is handled afterward.</p>
               </Section>
 
@@ -134,9 +134,9 @@ export default function PrivacyPolicy() {
                   <li><span className="font-[700] text-[#0C1E3A]">CNIC</span> — used for Check Challan and Challan Status requests, to help locate the correct record.</li>
                   <li><span className="font-[700] text-[#0C1E3A]">Phone Number</span> — for our team's reference; we primarily contact you by email.</li>
                   <li><span className="font-[700] text-[#0C1E3A]">Email Address</span> — required for every request, since results are delivered by email.</li>
-                  <li><span className="font-[700] text-[#0C1E3A]">Challan Number</span> — used for Check Challan, Challan Status, and Complaint Status requests.</li>
+                  <li><span className="font-[700] text-[#0C1E3A]">Challan Number</span> — used for Challan Status and Complaint Status requests.</li>
                   <li><span className="font-[700] text-[#0C1E3A]">Complaint Number</span> — used only for Check Complaint Status requests.</li>
-                  <li><span className="font-[700] text-[#0C1E3A]">Vehicle Number</span> — used only for Check Blacklist / Block requests.</li>
+                  <li><span className="font-[700] text-[#0C1E3A]">Vehicle Number / Registration</span> — used for Check Challan and Check Blacklist / Block requests.</li>
                 </ul>
                 <p>We do not ask for payment details, passwords, or account credentials anywhere on this website, and we do not process payments on your behalf — any challan payment is completed directly through your bank or the relevant official channel.</p>
               </Section>
@@ -209,8 +209,8 @@ export default function PrivacyPolicy() {
 
               <Section id="contact" title="Contact Us" icon={Mail}>
                 <p>If you have any questions about this Privacy Policy or how your information is handled, please contact us:</p>
-                <a href="mailto:support@karachiechallan.pk" className="inline-flex items-center gap-2 mt-1 rounded-full bg-[#0C1E3A] text-white px-4 py-2 text-[13px] font-[700] hover:bg-[#0A1933] transition">
-                  <Mail size={14} /> support@karachiechallan.pk
+                <a href="mailto:support@asaanchallan.pk" className="inline-flex items-center gap-2 mt-1 rounded-full bg-[#0C1E3A] text-white px-4 py-2 text-[13px] font-[700] hover:bg-[#0A1933] transition">
+                  <Mail size={14} /> support@asaanchallan.pk
                 </a>
               </Section>
             </div>
@@ -220,7 +220,7 @@ export default function PrivacyPolicy() {
 
       <footer className="bg-white border-t border-[#0C1E3A]/5">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] leading-5">
-          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Karachi E-Challan. All rights reserved. Not a government website.</span>
+          <span className="text-[#5B6B85] text-center sm:text-left">© 2026 Asaan Challan. All rights reserved. Not a government website.</span>
           <span className="inline-flex items-center gap-2 font-[600] text-[#0C1E3A] shrink-0"><Shield size={14} className="text-[#0F766E]" /> Secure • Verified • Transparent</span>
         </div>
       </footer>
